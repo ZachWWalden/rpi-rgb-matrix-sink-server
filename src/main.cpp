@@ -18,8 +18,6 @@
 #include <vector>
 
 #include "Graphics/Graphics.hpp"
-#include "Graphics/Scene/Scene.hpp"
-#include "Graphics/Sprite/Sprite.hpp"
 #include "Utils/triplepointer.hpp"
 #include "Network/Network.hpp"
 #include "stdint.h"
@@ -38,7 +36,6 @@ volatile bool interrupt_received = false;
 static void InterruptHandler(int signo) {
   interrupt_received = true;
 }
-void* networkThread(void* arg);
 
 int main(int argc, char *argv[]) {
   RGBMatrix::Options defaults;
@@ -71,7 +68,10 @@ int main(int argc, char *argv[]) {
 
   while(!interrupt_received)
   {
-
+	//Wait for a frame
+	//When a frame is received, map each of it's regions to a panel in the chain.
+	//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
+	//write appropriate data to the canvas
   }
 
 
@@ -81,8 +81,3 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void* networkThread(void* arg)
-{
-
-	pthread_exit(0);
-}
