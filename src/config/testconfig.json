@@ -1,0 +1,40 @@
+{
+	"hres" : 128,
+	"vres" : 64,
+	"panel_hres" : 64,
+	"panel_vres" : 64,
+	"chain_length" : 2,
+	"panel_maps" : [
+		{
+			"num" : 0,
+			"source" : {
+				"x1" : 0,
+				"y1" : 0,
+				"x2" : 63,
+				"y2" : 63
+			},
+			"destination" : {
+				"x1" : 0,
+				"y1" : 0,
+				"x2" : 63,
+				"y2" : 63
+			}
+		},
+		{
+			"num" : 1,
+			"source" : {
+				"x1" : 64,
+				"y1" : 0,
+				"x2" : 127,
+				"y2" : 63
+			},
+			"destination" : {
+				"x1" : 64,
+				"y1" : 0,
+				"x2" : 127,
+				"y2" : 63
+			}
+		}
+	]
+
+}
