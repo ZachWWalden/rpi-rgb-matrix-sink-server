@@ -24,23 +24,112 @@
 /*==================================================================================
  *Class - Config
  *Author - Zach Walden
- *Created -
- *Last Changed -
- *Description -
+ *Created - 4/25/24
+ *Last Changed - 4/25/24
+ *Description - Config Parser
 ====================================================================================*/
 
 #pragma once
 
 #include "Config.hpp"
 
+#include <fstream>
+#include <iostream>
+#include <json/config.h>
+#include <json/reader.h>
+#include <json/value.h>
+
 Config::Config()
 {
+	this->is_valid = this->readConfigFile();
 }
-CHNAGE::~Config()
+Config::~Config()
 {
+	std::vector<PanelMap*>::iterator itr = this->panels.begin();
+	for(itr; itr < this->panels.end(); itr++)
+	{
+		delete *itr;
+	}
 }
 
+bool Config::readConfigFile()
+{
+	//TODO add in config sanitizing
+	bool valid_config = true;
+	//debug config path
+	std::string config_path = "config/testconfig.json";
+	//get config path
+#ifndef DEBUG
+	//use $XDG_CONFIG_HOME
+	config_path = this->getConfigHome() + "/config";
+#endif
 
+	std::ifstream config;
+	config.open(config_path);
+
+	Json::Value root;
+	Json::CharReaderBuilder builder;
+	JSONCPP_STRING errs;
+
+	if(!Json::parseFromStream(builder, config, &root, &errs))
+	{
+		std::cout << errs << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	//get port
+	this->port = root["port"].asInt();
+	//get src hres
+	this->hres = root["hres"].asInt();
+	//get src vres
+	this->vres = root["vres"].asInt();
+	//get panel hres
+	this->panel_hres = root["panel_hres"].asInt();
+	//get panel vres
+	this->panel_vres = root["panel_vres"].asInt();
+	//get chain length
+	this->chain_length = root["chain_length"].asInt();
+
+	Json::Value panel_maps = root["panel_maps"];
+	//loop over panels
+	for(int i = 0; i < panel_maps.size(); i++)
+	{
+		Json::Value cur_src = panel_maps[i]["source"];
+		Json::Value cur_dst = panel_maps[i]["destination"];
+
+		this->panels.push_back(new PanelMap(ZwGraphics::Rectangle(
+												ZwGraphics::Point(
+													cur_src["x1"].asInt(),
+													cur_src["y1"].asInt()
+												),
+												ZwGraphics::Point(
+													cur_src["x2"].asInt(),
+													cur_src["y2"].asInt()
+												)
+											),
+											ZwGraphics::Rectangle(
+												ZwGraphics::Point(
+													cur_dst["x1"].asInt(),
+													cur_dst["y1"].asInt()
+												),
+												ZwGraphics::Point(
+													cur_dst["x2"].asInt(),
+													cur_dst["y2"].asInt()
+												)
+											)));
+	}
+
+	return valid_config;
+}
+
+std::string Config::getConfigHome()
+{
+	std::string value = "";
+	char *val = getenv("$XDG_CONFIG_HOME");
+	if(val != NULL)
+		value = val;
+	return value;
+}
 
 
 

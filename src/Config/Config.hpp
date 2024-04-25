@@ -24,15 +24,36 @@
 /*==================================================================================
  *Class - Config
  *Author - Zach Walden
- *Created -
- *Last Changed -
- *Description -
+ *Created - 4/25/24
+ *Last Changed - 4/25/24
+ *Description - Reads and Unmarshalls a json configuration file.
 ====================================================================================*/
+
+#include <cstdint>
+#include <json/json.h>
+#include <string>
+#include <vector>
+
+#include "../Graphics/Graphics.hpp"
+
+struct PanelMap
+{
+	ZwGraphics::Rectangle source, destination;
+	PanelMap(ZwGraphics::Rectangle src, ZwGraphics::Rectangle dest)
+	{
+		source = src;
+		destination = dest;
+	}
+};
 
 class Config
 {
 	//Attributes
 public:
+	uint16_t hres, vres, panel_hres, panel_vres, port;
+	uint8_t chain_length;
+	bool is_valid = false;
+	std::vector<PanelMap*> panels;
 
 private:
 	//Methods
@@ -41,4 +62,7 @@ public:
 	~Config();
 
 private:
+	bool readConfigFile();
+	std::string getConfigHome();
+
 };
