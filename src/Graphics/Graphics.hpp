@@ -45,6 +45,20 @@ struct Point
 	}
 };
 
+struct Vec2I
+{
+	int x;
+	int y;
+	Vec2I()
+	{
+
+	}
+	Vec2I(int new_x, int new_y)
+	{
+		x = new_x;
+		y = new_y;
+	}
+};
 
 struct Rectangle
 {
