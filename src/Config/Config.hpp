@@ -25,7 +25,7 @@
  *Class - Config
  *Author - Zach Walden
  *Created - 4/25/24
- *Last Changed - 4/25/24
+ *Last Changed - 5/28/24
  *Description - Reads and Unmarshalls a json configuration file.
 ====================================================================================*/
 
@@ -36,13 +36,31 @@
 
 #include "../Graphics/Graphics.hpp"
 
+struct RotationConstants
+{
+	ZwGraphics::Vec2I offset, increment;
+	bool row_major;
+	RotationConstants()
+	{
+
+	}
+	RotationConstants(ZwGraphics::Vec2I new_offset, ZwGraphics::Vec2I new_increment, bool new_row_major)
+	{
+		offset = new_offset;
+		increment = new_increment;
+		row_major = new_row_major;
+	}
+};
+
 struct PanelMap
 {
 	ZwGraphics::Rectangle source, destination;
-	PanelMap(ZwGraphics::Rectangle src, ZwGraphics::Rectangle dest)
+	RotationConstants rot_constants;
+	PanelMap(ZwGraphics::Rectangle src, ZwGraphics::Rectangle dest, RotationConstants rotation_constants)
 	{
 		source = src;
 		destination = dest;
+		rot_constants = rotation_constants;
 	}
 };
 
@@ -64,5 +82,6 @@ public:
 private:
 	bool readConfigFile();
 	std::string getConfigHome();
+	RotationConstants getRotConstants(int rot);
 
 };

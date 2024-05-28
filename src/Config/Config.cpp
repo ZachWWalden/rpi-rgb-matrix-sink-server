@@ -25,7 +25,7 @@
  *Class - Config
  *Author - Zach Walden
  *Created - 4/25/24
- *Last Changed - 4/25/24
+ *Last Changed - 5/28/24
  *Description - Config Parser
 ====================================================================================*/
 
@@ -33,6 +33,7 @@
 
 #include "Config.hpp"
 
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <json/config.h>
@@ -97,6 +98,8 @@ bool Config::readConfigFile()
 		Json::Value cur_src = panel_maps[i]["source"];
 		Json::Value cur_dst = panel_maps[i]["destination"];
 
+		ZwGraphics::Vec2I rot_constants = getRotConstants(panel_maps[i]["rot"].asInt());
+
 		this->panels.push_back(new PanelMap(ZwGraphics::Rectangle(
 												ZwGraphics::Point(
 													cur_src["x1"].asInt(),
@@ -116,7 +119,9 @@ bool Config::readConfigFile()
 													cur_dst["x2"].asInt(),
 													cur_dst["y2"].asInt()
 												)
-											)));
+											),
+											rot_constants
+											));
 	}
 
 	return valid_config;
@@ -129,6 +134,37 @@ std::string Config::getConfigHome()
 	if(val != NULL)
 		value = val;
 	return value;
+}
+
+RotationConstants Config::getRotConstants(int rot)
+{
+	int h_offset = 0, v_offset = 0, h_increment = 0, v_increment = 0;
+	bool row_major = true;
+	if(rot == 0)
+	{
+		h_offset = 0; v_offset = 0; h_increment = 1; v_increment = 1;
+		row_major = true;
+	}
+	//(0,0) -> (h_res, 0)
+	else if (rot == 90 || rot == -270) {
+		h_offset = this->panel_hres; v_offset = 0; h_increment = -1; v_increment = 1;
+		row_major = false;
+	}
+	//(0,0) -> (h_res, v_res)
+	else if (rot == 180 || rot == -180) {
+		h_offset = this->panel_hres; v_offset = this->panel_vres; h_increment = -1; v_increment = -1;
+		row_major = true;
+	}
+	//(0,0) -> (0, v_res)
+	else if (rot == 270 || rot == -90) {
+		h_offset = 0; v_offset = this->panel_vres; h_increment = 1; v_increment = -1;
+		row_major = false;
+	}
+	else
+	{
+		LOG("Invalid Rotation constant. Valid values are: 0, +-90, +-180, +-270");
+		exit(EXIT_FAILURE);
+	}
 }
 
 
