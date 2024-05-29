@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-#include "../Graphics/Graphics.hpp"
+#include "../Graphics/GraphicsStructs.hpp"
 
 struct RotationConstants
 {
@@ -71,13 +71,15 @@ public:
 	uint16_t hres, vres, panel_hres, panel_vres, port;
 	uint8_t chain_length;
 	bool is_valid = false;
-	std::vector<PanelMap*> panels;
 
 private:
+	std::vector<PanelMap*> panels;
 	//Methods
 public:
 	Config();
 	~Config();
+
+	std::vector<PanelMap*>* getPanelMaps();
 
 private:
 	bool readConfigFile();

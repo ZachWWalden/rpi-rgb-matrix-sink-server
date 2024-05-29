@@ -98,7 +98,7 @@ bool Config::readConfigFile()
 		Json::Value cur_src = panel_maps[i]["source"];
 		Json::Value cur_dst = panel_maps[i]["destination"];
 
-		ZwGraphics::Vec2I rot_constants = getRotConstants(panel_maps[i]["rot"].asInt());
+		RotationConstants rot_constants = getRotConstants(panel_maps[i]["rot"].asInt());
 
 		this->panels.push_back(new PanelMap(ZwGraphics::Rectangle(
 												ZwGraphics::Point(
@@ -167,6 +167,10 @@ RotationConstants Config::getRotConstants(int rot)
 	}
 }
 
+std::vector<PanelMap*>* Config::getPanelMaps()
+{
+	return &(this->panels);
+}
 
 
 
