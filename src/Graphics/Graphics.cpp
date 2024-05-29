@@ -678,6 +678,9 @@ uint8_t*** Graphics::rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet)
 			flat_idx++;
 		}
 	}
+
+	delete frame_packet.data;
+
 	return rgb888;
 }
 
@@ -702,6 +705,9 @@ uint8_t*** Graphics::flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame
 			flat_idx += 3;
 		}
 	}
+
+	delete frame_packet.data;
+
 	return rgb888;
 }
 
