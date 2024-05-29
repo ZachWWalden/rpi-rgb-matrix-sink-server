@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of rpi-rgb-matrix-sink-server
+ *
+ * Copyright (C) 2024 Zachary Walden zachary.walden@eagles.oc.edu
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/gpl-2.0.en.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #pragma once
 #include "Graphics.hpp"
 #include "stdlib.h"
@@ -105,6 +128,8 @@ void Graphics::drawWithMaps(std::vector<PanelMap*>* panels)
 			}
 		}
 	}
+	//as soon as we are done copying to the Canvas object, free the triple pointer.
+	this->freeRenderTarget();
 }
 
 void Graphics::PlotPoint(uint8_t x, uint8_t y, Color color)
@@ -614,6 +639,12 @@ void Graphics::clearRenderTarget()
 	}
 }
 
+void Graphics::freeRenderTarget()
+{
+	if(this->render_target != nullptr)
+		deallocTriplePointer<uint8_t>(this->render_target, this->height, this->width);
+}
+
 bool Graphics::isPointOnScreen(Point pt)
 {
 	bool ret_val = true;
@@ -654,6 +685,9 @@ uint8_t*** Graphics::convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket fram
 		}
 	}
 
+	this->width = frame_packet.header.h_res;
+	this->height = frame_packet.header.v_res;
+
 	return ret_val;
 }
 
@@ -672,6 +706,7 @@ uint8_t*** Graphics::rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet)
 	{
 		for(int x = 0; x < frame_packet.header.h_res && flat_idx < num_pixels; x++)
 		{
+			//Code borrowed from Desmume under GPL2
 			rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] >>  0) & 0x1F) * intensity) >> 16 );
 			rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  5) & 0x1F) * intensity) >> 16 );
 			rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  10) & 0x1F) * intensity) >> 16 );

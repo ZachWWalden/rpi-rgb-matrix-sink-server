@@ -79,6 +79,7 @@ class Graphics
 
 		uint8_t*** convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket frame_packet);
 	private:
+		void freeRenderTarget();
 
 		void PlotLineHigh(Point p1, Point p2, Color color);
 		void PlotLineLow(Point p1, Point p2, Color color);
