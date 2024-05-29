@@ -33,11 +33,37 @@
 #include <cstddef>
 #include <cstdlib>
 #include <string>
+#include <cstdint>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
-#include "stdint.h"
+namespace ZwNetwork{
 
-namespace ZwNetwork
+//4 byte header
+//Ensure there is no padding in structures bewteen the pac(push) and pack(pop).
+#pragma pack(push,1)
+struct SinkPacketHeader
 {
+	//resolution
+	uint8_t h_res;
+	uint8_t v_res;
+	//Bytes for pixels
+	uint8_t bytes_per_pixel;
+	//color mode
+	uint8_t color_mode;
+};
+//
+#pragma pack(pop)
+
+struct SinkPacket
+{
+	SinkPacketHeader header;
+	uint8_t *data;
+};
 
 class Network
 {
@@ -45,10 +71,17 @@ class Network
 public:
 
 private:
+	int server_fd;
+	sockaddr_in addr;
+	SinkPacketHeader header;
 	//Methods
 public:
 	Network();
+	Network(uint16_t port);
 	~Network();
+
+	bool listen();
+	SinkPacket read();
 
 private:
 };

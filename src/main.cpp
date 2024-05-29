@@ -6,7 +6,9 @@
 // (but note, that the led-matrix library this depends on is GPL v2)
 #include <cstddef>
 #include <cstdlib>
+#include <cstdint>
 #include <unistd.h>
+#include <pthread.h>
 #include <math.h>
 #include <stdio.h>
 #include <signal.h>
@@ -19,30 +21,34 @@
 
 #include "Graphics/Graphics.hpp"
 #include "Utils/triplepointer.hpp"
+#include "Config/Config.hpp"
 #include "Network/Network.hpp"
-#include "stdint.h"
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
 
-#define CONFIG_PATH "stocks/stocks.json"
-#define IMAGE_PATH "stocks/"
+void* networkThread(void* arg);
+pthread_mutex_t lock;
 
-#define CHAIN_LENGTH 2
-#define DISP_V_RES 64
-#define DISP_H_RES 64
-
+volatile bool connection_valid = false;
 volatile bool interrupt_received = false;
+volatile Config *config;
+volatile ZwGraphics::Graphics *graphics_mgr;
 
 static void InterruptHandler(int signo) {
   interrupt_received = true;
 }
 
 int main(int argc, char *argv[]) {
+  config = new Config();
+
+  if(!config->is_valid)
+		return EXIT_FAILURE;
+
   RGBMatrix::Options defaults;
   defaults.hardware_mapping = "adafruit-hat";  // or e.g. "adafruit-hat"
-  defaults.rows = DISP_V_RES;
-  defaults.cols = DISP_H_RES;
-  defaults.chain_length = CHAIN_LENGTH;
+  defaults.rows = config->panel_vres;
+  defaults.cols = config->panel_hres;
+  defaults.chain_length = config->chain_length;
   defaults.parallel = 1;
   //This sets the default brightness.
   defaults.brightness = 50;
@@ -58,20 +64,29 @@ int main(int argc, char *argv[]) {
   signal(SIGTERM, InterruptHandler);
   signal(SIGINT, InterruptHandler);
 
-  ZwGraphics::Graphics graphics_mgr(canvas, DISP_V_RES, DISP_H_RES);
-  ZwGraphics::Font font916 = graphics_mgr.fontFactory(ZwGraphics::Font9x16);
-  ZwGraphics::Font font79 = graphics_mgr.fontFactory(ZwGraphics::Font7x9);
+  if(pthread_mutex_init(&lock, NULL) != 0)
+  {
+	LOG("Failed to initialize mutex");
+	return EXIT_FAILURE;
+  }
 
-  //open list of tickers and ticker parameters.
-  std::ifstream ifs;
-  ifs.open(CONFIG_PATH);
+  graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
+  ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
+  ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
+
+  //start network thread and wait for data.
+  long unsigned int tid;
+  pthread_create(&tid, NULL, networkThread, &tid);
 
   while(!interrupt_received)
   {
-	//Wait for a frame
-	//When a frame is received, map each of it's regions to a panel in the chain.
-	//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
-	//write appropriate data to the canvas
+		if(connection_valid)
+		{
+			//Wait for a frame
+			//When a frame is received, map each of it's regions to a panel in the chain.
+			//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
+			//write appropriate data to the canvas
+		}
   }
 
 
@@ -81,3 +96,19 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+void* networkThread(void* arg)
+{
+	//Initialze
+	ZwNetwork::Network interface(config->port, );
+	while(!interrupt_received)
+	{
+		//wait for a connection
+		connection_valid = true;
+		while(!interrupt_received && connection_valid)
+		{
+			//Handle a single connection.
+			//wait for frame
+		}
+	}
+	pthread_exit(0);
+}
