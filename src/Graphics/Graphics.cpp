@@ -59,6 +59,52 @@ void Graphics::draw()
 	}
 }
 
+void Graphics::drawWithMaps(std::vector<PanelMap*>* panels)
+{
+	if(this->canvas == nullptr)
+	{
+		LOG("Graphics Instance does not have a Canvas to draw to");
+		return;
+	}
+	if(this->render_target == nullptr)
+	{
+		LOG("render_target is null");
+		return;
+	}
+
+	std::vector<PanelMap*>::iterator itr = panels->begin();
+	for(; itr < panels->end(); itr++)
+	{
+		int x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;
+		int y = (*itr)->source.p_top_left.y + (*itr)->rot_constants.offset.y;
+		//Loop can switch between column and row major.
+		for(int rows = (*itr)->destination.p_top_left.x; rows <= (*itr)->destination.p_bot_right.x; rows++)
+		{
+			for(int cols = (*itr)->destination.p_top_left.y ;cols <= (*itr)->destination.p_bot_right.y; cols++)
+			{
+				//Write pixel to canvas
+				this->SetCanvasPixel(cols, rows, Color(0xFF, this->render_target[y][x][0], this->render_target[y][x][1], this->render_target[y][x][2]));
+				if((*itr)->rot_constants.row_major)
+					x += (*itr)->rot_constants.increment.x;
+				else
+					y += (*itr)->rot_constants.increment.y;
+			}
+			if((*itr)->rot_constants.row_major)
+			{
+				y += (*itr)->rot_constants.increment.y;
+				//reset the other
+				x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;
+			}
+			else
+			{
+				x += (*itr)->rot_constants.increment.x;
+				//reset the other
+				y = (*itr)->source.p_top_left.y + (*itr)->rot_constants.offset.y;
+			}
+		}
+	}
+}
+
 void Graphics::PlotPoint(uint8_t x, uint8_t y, Color color)
 {
 	if(x >= this->width || y >= height || this->render_target == nullptr)
