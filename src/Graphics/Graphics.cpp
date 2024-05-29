@@ -2,9 +2,11 @@
 #include "Graphics.hpp"
 #include "stdlib.h"
 #include <cmath>
+#include <cstdint>
 #include <sys/types.h>
 
 #include "../Logging/Logging.hpp"
+#include "../Utils/triplepointer.hpp"
 
 namespace ZwGraphics
 {
@@ -626,5 +628,82 @@ uint8_t Graphics::sadd8(uint8_t a, uint8_t b)
 {
 	return (a > 0xFF - b) ? 0xFF : a + b;
 }
+/*	const u16 intensity_u16 = (u16)(intensity * (float)(0xFFFF));
+	u8  r = (u8)( (((outColor >>  0) & 0x1F) * intensity_u16) >> 16 );
+	u8  g = (u8)( (((outColor >>  5) & 0x1F) * intensity_u16) >> 16 );
+	u8  b = (u8)( (((outColor >> 10) & 0x1F) * intensity_u16) >> 16 );
+*/
+uint8_t*** Graphics::convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket frame_packet)
+{
+	uint8_t ***ret_val = nullptr;
+
+	switch (frame_packet.header.color_mode)
+	{
+		case 0x00 : {
+			//NDS RGB555 with Intensity
+			ret_val = this->rgb555torgb888Intensity(frame_packet);
+			break;
+		}
+		case 0x01 : {
+			//Flat RGB888 to Triple Pointer.
+			ret_val = this->flatRgb888torgb888TriplePointer(frame_packet);
+			break;
+		}
+		default : {
+			break;
+		}
+	}
+
+	return ret_val;
+}
+
+uint8_t*** Graphics::rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet)
+{
+	if(frame_packet.data == nullptr)
+		return nullptr;
+	uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res, frame_packet.header.h_res, 3, 0x00);
+	uint16_t* buffer = (uint16_t*)frame_packet.data;
+	int num_pixels = frame_packet.header.h_res * frame_packet.header.v_res;
+	int flat_idx = 0;
+	//convert floating point intensity 0.0f <= intensity <= 1.0f to a uint16_t
+	const uint16_t intensity = (uint16_t)(frame_packet.header.intensity * (float)(0xFFFF));
+
+	for(int y = 0; y < frame_packet.header.v_res; y++)
+	{
+		for(int x = 0; x < frame_packet.header.h_res && flat_idx < num_pixels; x++)
+		{
+			rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] >>  0) & 0x1F) * intensity) >> 16 );
+			rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  5) & 0x1F) * intensity) >> 16 );
+			rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  10) & 0x1F) * intensity) >> 16 );
+			flat_idx++;
+		}
+	}
+	return rgb888;
+}
+
+uint8_t*** Graphics::flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame_packet)
+{
+	if(frame_packet.data == nullptr)
+		return nullptr;
+	uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res, frame_packet.header.h_res, 3, 0x00);
+	uint8_t* buffer = (uint8_t*)frame_packet.data;
+	int num_pixels = frame_packet.header.h_res * frame_packet.header.v_res;
+	int flat_idx = 0;
+	//convert floating point intensity 0.0f <= intensity <= 1.0f to a uint16_t
+	const uint16_t intensity = (uint16_t)(frame_packet.header.intensity * (float)(0xFFFF));
+
+	for(int y = 0; y < frame_packet.header.v_res; y++)
+	{
+		for(int x = 0; x < frame_packet.header.h_res && flat_idx < num_pixels; x++)
+		{
+			rgb888[y][x][0] = buffer[flat_idx];
+			rgb888[y][x][1] = buffer[flat_idx + 1];
+			rgb888[y][x][2] = buffer[flat_idx + 2];
+			flat_idx += 3;
+		}
+	}
+	return rgb888;
+}
 
 }
+

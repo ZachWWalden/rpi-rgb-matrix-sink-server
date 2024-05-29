@@ -43,7 +43,7 @@
 
 namespace ZwNetwork{
 
-//4 byte header
+//8 byte header
 //Ensure there is no padding in structures bewteen the pac(push) and pack(pop).
 #pragma pack(push,1)
 struct SinkPacketHeader
@@ -55,6 +55,8 @@ struct SinkPacketHeader
 	uint8_t bytes_per_pixel;
 	//color mode
 	uint8_t color_mode;
+	//Display intensity
+	float intensity;
 };
 //
 #pragma pack(pop)

@@ -2,6 +2,8 @@
 #include "../../rpi-rgb-led-matrix/include/led-matrix.h"
 
 #include "../Config/Config.hpp" //this file includes GraphicsStructs.hpp
+#include "../Network/Network.hpp"
+#include <cstdint>
 
 using rgb_matrix::Canvas;
 
@@ -74,6 +76,8 @@ class Graphics
 
 		void setRenderTarget(uint8_t*** render_target);
 		void clearRenderTarget();
+
+		uint8_t*** convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket frame_packet);
 	private:
 
 		void PlotLineHigh(Point p1, Point p2, Color color);
@@ -84,6 +88,9 @@ class Graphics
 		bool isPointOnScreen(Point pt);
 
 		uint8_t sadd8(uint8_t a, uint8_t b);
+
+		uint8_t*** rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet);
+		uint8_t*** flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame_packet);
 };
 
 }
