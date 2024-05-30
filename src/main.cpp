@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 
   RGBMatrix::Options defaults;
-  defaults.hardware_mapping = "adafruit-hat";  // or e.g. "adafruit-hat"
+  defaults.hardware_mapping = config->hardware_mapping;  // or e.g. "adafruit-hat"
   defaults.rows = config->panel_vres;
   defaults.cols = config->panel_hres;
   defaults.chain_length = config->chain_length;

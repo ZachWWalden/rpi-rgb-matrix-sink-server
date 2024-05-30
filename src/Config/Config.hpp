@@ -25,7 +25,7 @@
  *Class - Config
  *Author - Zach Walden
  *Created - 4/25/24
- *Last Changed - 5/28/24
+ *Last Changed - 5/29/24
  *Description - Reads and Unmarshalls a json configuration file.
 ====================================================================================*/
 
@@ -71,6 +71,7 @@ public:
 	uint16_t hres, vres, panel_hres, panel_vres, port;
 	uint8_t num_chains;
 	uint8_t chain_length;
+	std::string hardware_mapping;
 	bool is_valid = false;
 
 private:

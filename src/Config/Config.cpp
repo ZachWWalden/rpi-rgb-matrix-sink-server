@@ -80,6 +80,8 @@ bool Config::readConfigFile()
 
 	//get port
 	this->port = root["port"].asInt();
+	//get hardware mapping: "regular", "adafruit-hat", "adafruit-hat-pwm", "compute-moudle"
+	this->hardware_mapping = root["hardware_mapping"].asCString();
 	//get src hres
 	this->hres = root["hres"].asInt();
 	//get src vres
