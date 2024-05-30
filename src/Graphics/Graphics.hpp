@@ -39,7 +39,7 @@ class Graphics
 		~Graphics();
 
 		void draw();
-		void drawWithMaps(std::vector<PanelMap*>* panels);
+		void drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels);
 
 		void PlotPoint(uint8_t x, uint8_t y, Color color);
 

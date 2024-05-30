@@ -84,7 +84,7 @@ void Graphics::draw()
 	}
 }
 
-void Graphics::drawWithMaps(std::vector<PanelMap*>* panels)
+void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 {
 	if(this->canvas == nullptr)
 	{
@@ -97,7 +97,7 @@ void Graphics::drawWithMaps(std::vector<PanelMap*>* panels)
 		return;
 	}
 
-	std::vector<PanelMap*>::iterator itr = panels->begin();
+	std::vector<ZwConfig::PanelMap*>::iterator itr = panels->begin();
 	for(; itr < panels->end(); itr++)
 	{
 		int x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;

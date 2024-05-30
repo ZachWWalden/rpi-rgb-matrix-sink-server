@@ -25,9 +25,12 @@
  *Header - GraphicsStructs
  *Author - Zach Walden
  *Created - 05/28/24
- *Last Changed - 05/28/24
+ *Last Changed - 05/29/24
  *Description -
 ====================================================================================*/
+
+#ifndef GRAPHICSSTRUCTS_H
+#define GRAPHICSSTRUCTS_H
 
 #include <cstdint>
 
@@ -178,3 +181,4 @@ enum Fonts
 	}
 };
 }
+#endif

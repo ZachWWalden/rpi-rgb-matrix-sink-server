@@ -40,6 +40,9 @@
 #include <json/reader.h>
 #include <json/value.h>
 
+namespace ZwConfig
+{
+
 Config::Config()
 {
 	this->is_valid = this->readConfigFile();
@@ -181,6 +184,7 @@ const char* Config::getHardwareMapping()
 	return this->hardware_mapping.c_str();
 }
 
+}
 
 
 

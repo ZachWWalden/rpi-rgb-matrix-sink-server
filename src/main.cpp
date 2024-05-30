@@ -34,14 +34,13 @@ volatile bool interrupt_received = false;
 
 volatile int port;
 
-volatile ZwGraphics::Graphics *graphics_mgr;
 
 static void InterruptHandler(int signo) {
   interrupt_received = true;
 }
 
 int main(int argc, char *argv[]) {
-	Config* config = new Config();
+	ZwConfig::Config* config = new ZwConfig::Config();
 	port = config->port;
 
 	if(!config->is_valid)
@@ -73,7 +72,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
+	ZwGraphics::Graphics *graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
 	ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
 	ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
 

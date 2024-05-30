@@ -28,6 +28,8 @@
  *Last Changed - 5/29/24
  *Description - Reads and Unmarshalls a json configuration file.
 ====================================================================================*/
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include <cstdint>
 #include <json/json.h>
@@ -35,6 +37,10 @@
 #include <vector>
 
 #include "../Graphics/GraphicsStructs.hpp"
+#include "../Logging/Logging.hpp"
+
+namespace ZwConfig
+{
 
 struct RotationConstants
 {
@@ -90,3 +96,7 @@ private:
 	RotationConstants getRotConstants(int rot);
 
 };
+
+}
+
+#endif
