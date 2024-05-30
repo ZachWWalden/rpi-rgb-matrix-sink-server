@@ -71,17 +71,18 @@ public:
 	uint16_t hres, vres, panel_hres, panel_vres, port;
 	uint8_t num_chains;
 	uint8_t chain_length;
-	std::string hardware_mapping;
 	bool is_valid = false;
 
 private:
 	std::vector<PanelMap*> panels;
+	std::string hardware_mapping;
 	//Methods
 public:
 	Config();
 	~Config();
 
 	std::vector<PanelMap*>* getPanelMaps();
+	const char* getHardwareMapping();
 
 private:
 	bool readConfigFile();

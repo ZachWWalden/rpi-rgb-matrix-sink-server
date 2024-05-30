@@ -176,6 +176,11 @@ std::vector<PanelMap*>* Config::getPanelMaps()
 	return &(this->panels);
 }
 
+const char* Config::getHardwareMapping()
+{
+	return this->hardware_mapping.c_str();
+}
+
 
 
 

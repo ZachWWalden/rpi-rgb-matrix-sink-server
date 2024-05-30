@@ -31,7 +31,9 @@ pthread_mutex_t lock;
 
 volatile bool connection_valid = false;
 volatile bool interrupt_received = false;
-volatile Config *config;
+
+volatile int port;
+
 volatile ZwGraphics::Graphics *graphics_mgr;
 
 static void InterruptHandler(int signo) {
@@ -39,67 +41,68 @@ static void InterruptHandler(int signo) {
 }
 
 int main(int argc, char *argv[]) {
-  config = new Config();
+	Config* config = new Config();
+	port = config->port;
 
-  if(!config->is_valid)
+	if(!config->is_valid)
 		return EXIT_FAILURE;
 
-  RGBMatrix::Options defaults;
-  defaults.hardware_mapping = config->hardware_mapping;  // or e.g. "adafruit-hat"
-  defaults.rows = config->panel_vres;
-  defaults.cols = config->panel_hres;
-  defaults.chain_length = config->chain_length;
-  defaults.parallel = config->num_chains;
-  //This sets the default brightness.
-  defaults.brightness = 50;
-  defaults.scan_mode = 0;
-  defaults.show_refresh_rate = true;
-  Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
-  if (canvas == NULL)
-    return 1;
+	RGBMatrix::Options defaults;
+	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
+	defaults.rows = config->panel_vres;
+	defaults.cols = config->panel_hres;
+	defaults.chain_length = config->chain_length;
+	defaults.parallel = config->num_chains;
+	//This sets the default brightness.
+	defaults.brightness = 50;
+	defaults.scan_mode = 0;
+	defaults.show_refresh_rate = true;
+	Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
+	if (canvas == NULL)
+		return 1;
 
-  // It is always good to set up a signal handler to cleanly exit when we
-  // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
-  // for that.
-  signal(SIGTERM, InterruptHandler);
-  signal(SIGINT, InterruptHandler);
+	// It is always good to set up a signal handler to cleanly exit when we
+	// receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
+	// for that.
+	signal(SIGTERM, InterruptHandler);
+	signal(SIGINT, InterruptHandler);
 
-  if(pthread_mutex_init(&lock, NULL) != 0)
-  {
-	LOG("Failed to initialize mutex");
-	return EXIT_FAILURE;
-  }
+	if(pthread_mutex_init(&lock, NULL) != 0)
+	{
+		LOG("Failed to initialize mutex");
+		return EXIT_FAILURE;
+	}
 
-  graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
-  ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
-  ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
+	graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
+	ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
+	ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
 
-  //start network thread and wait for data.
-  long unsigned int tid;
-  pthread_create(&tid, NULL, networkThread, &tid);
+	//start network thread and wait for data.
+	long unsigned int tid;
+	pthread_create(&tid, NULL, networkThread, &tid);
 
-  while(!interrupt_received)
-  {
-		if(connection_valid)
-		{
-			//Wait for a frame
-			//When a frame is received, map each of it's regions to a panel in the chain.
-			//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
-			//write appropriate data to the canvas
-		}
-  }
+	while(!interrupt_received)
+	{
+			if(connection_valid)
+			{
+				//Wait for a frame
+				//When a frame is received, map each of it's regions to a panel in the chain.
+				//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
+				//write appropriate data to the canvas
+			}
+	}
 
 
-  // Animation finished. Shut down the RGB matrix.
-  canvas->Clear();
-  delete canvas;
-  return 0;
+	// Animation finished. Shut down the RGB matrix.
+	canvas->Clear();
+	delete canvas;
+	return 0;
 }
 
 void* networkThread(void* arg)
 {
 	//Initialze
-	ZwNetwork::Network interface(config->port, );
+	ZwNetwork::Network interface(port, );
 	while(!interrupt_received)
 	{
 		//wait for a connection
