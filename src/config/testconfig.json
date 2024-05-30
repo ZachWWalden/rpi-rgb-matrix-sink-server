@@ -4,6 +4,7 @@
 	"vres" : 64,
 	"panel_hres" : 64,
 	"panel_vres" : 64,
+	"num_chains" : 1,
 	"chain_length" : 2,
 	"panel_maps" : [
 		{

@@ -47,7 +47,7 @@ Config::Config()
 Config::~Config()
 {
 	std::vector<PanelMap*>::iterator itr = this->panels.begin();
-	for(itr; itr < this->panels.end(); itr++)
+	for(; itr < this->panels.end(); itr++)
 	{
 		delete *itr;
 	}
@@ -88,6 +88,8 @@ bool Config::readConfigFile()
 	this->panel_hres = root["panel_hres"].asInt();
 	//get panel vres
 	this->panel_vres = root["panel_vres"].asInt();
+	//get num chains
+	this->chain_length = root["num_chains"].asInt();
 	//get chain length
 	this->chain_length = root["chain_length"].asInt();
 

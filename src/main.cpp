@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   defaults.rows = config->panel_vres;
   defaults.cols = config->panel_hres;
   defaults.chain_length = config->chain_length;
-  defaults.parallel = 1;
+  defaults.parallel = config->num_chains;
   //This sets the default brightness.
   defaults.brightness = 50;
   defaults.scan_mode = 0;
