@@ -85,9 +85,11 @@ int main(int argc, char *argv[]) {
 			if(connection_valid)
 			{
 				//Wait for a frame
-				//When a frame is received, map each of it's regions to a panel in the chain.
-				//Canvas V_RES = DISP_V_RES, Canvas H_RES = DISP_H_RES	* CHAIN_LENGTH - 1
-				//write appropriate data to the canvas
+				//recv msg
+				ZwNetwork::SinkPacket frame = recvmsg();
+				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(frame));
+				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
+				graphics_mgr->drawWithMaps(config->getPanelMaps());
 			}
 	}
 
@@ -110,6 +112,7 @@ void* networkThread(void* arg)
 		{
 			//Handle a single connection.
 			//wait for frame
+			//send message.
 		}
 	}
 	pthread_exit(0);
