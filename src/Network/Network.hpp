@@ -58,14 +58,22 @@ struct SinkPacketHeader
 	//Display intensity
 	float intensity;
 };
-//
 #pragma pack(pop)
+//
 
 struct SinkPacket
 {
 	SinkPacketHeader header;
 	uint8_t *data;
 };
+
+#pragma pack(push,1)
+struct MsgHeader
+{
+	SinkPacket* frame_header;
+};
+#pragma pack(pop)
+
 
 class Network
 {
@@ -84,6 +92,7 @@ public:
 
 	bool listen();
 	SinkPacket read();
+	bool write(uint8_t num_bytes, uint8_t* data);
 
 private:
 };
