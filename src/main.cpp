@@ -19,6 +19,12 @@
 #include <iomanip>
 #include <vector>
 
+#include <string.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <mqueue.h>
+
 #include "Graphics/Graphics.hpp"
 #include "Utils/triplepointer.hpp"
 #include "Config/Config.hpp"
@@ -26,14 +32,13 @@
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
 
+#define MSG_QUEUE_NAME "/rpimatrixsinkserver"
+
 void* networkThread(void* arg);
 pthread_mutex_t lock;
 
 volatile bool connection_valid = false;
 volatile bool interrupt_received = false;
-
-volatile int port;
-
 
 static void InterruptHandler(int signo) {
   interrupt_received = true;
@@ -41,7 +46,6 @@ static void InterruptHandler(int signo) {
 
 int main(int argc, char *argv[]) {
 	ZwConfig::Config* config = new ZwConfig::Config();
-	port = config->port;
 
 	if(!config->is_valid)
 		return EXIT_FAILURE;
@@ -60,6 +64,21 @@ int main(int argc, char *argv[]) {
 	if (canvas == NULL)
 		return 1;
 
+	//create message queue and and open read only
+	mqd_t mq_create;
+	int mq_ret, i = -1;
+	mq_attr attr;
+	attr.mq_flags = 0;
+	attr.mq_maxmsg = 1;
+	attr.mq_msgsize = sizeof(ZwNetwork::MsgHeader);
+	attr.mq_curmsgs = 0;
+
+	mq_create = mq_open(MSG_QUEUE_NAME, O_CREAT|O_RDONLY, 0744, &attr);
+	if (mq_create != 3)
+	{
+		LOG("Creation of receiver queue failed");
+		return EXIT_FAILURE;
+	}
 	// It is always good to set up a signal handler to cleanly exit when we
 	// receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
 	// for that.
@@ -78,7 +97,7 @@ int main(int argc, char *argv[]) {
 
 	//start network thread and wait for data.
 	long unsigned int tid;
-	pthread_create(&tid, NULL, networkThread, &tid);
+	pthread_create(&tid, NULL, networkThread, &(config->port));
 
 	while(!interrupt_received)
 	{
@@ -86,7 +105,8 @@ int main(int argc, char *argv[]) {
 			{
 				//Wait for a frame
 				//recv msg
-				ZwNetwork::SinkPacket frame = recvmsg();
+				ZwNetwork::MsgHeader msg;
+				mq_ret = mq_receive(mq_create, (const char*)&msg, sizeof(ZwNetwork::MsgHeader), NULL);
 				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(frame));
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
 				graphics_mgr->drawWithMaps(config->getPanelMaps());
@@ -102,18 +122,56 @@ int main(int argc, char *argv[]) {
 
 void* networkThread(void* arg)
 {
-	//Initialze
-	ZwNetwork::Network interface(port, );
+	//Initialze, port numnber was passed to this thread through arg. cast arg into uint16_t pointer then dereference
+	ZwNetwork::Network* interface = new ZwNetwork::Network(*((uint16_t*)arg));
+	//open msg queue write only
+	mqd_t mq_wronly;
+	mq_wronly = mq_open(MSG_QUEUE_NAME, O_WRONLY);
+	int mq_ret = -1;
 	while(!interrupt_received)
 	{
 		//wait for a connection
+		interface->listen();
 		connection_valid = true;
+		bool msg_sent = false;
 		while(!interrupt_received && connection_valid)
 		{
 			//Handle a single connection.
 			//wait for frame
+			ZwNetwork::SinkPacket packet = interface->read();
+			ZwNetwork::MsgHeader msq_header;
+			msq_header.frame_header = &packet;
+			//Check if termination packet has been sent.
+			if(packet.header.color_mode == 0xFF)
+			{
+				LOG("Connection terminated");
+				connection_valid = false;
+			}
 			//send message.
+			if(connection_valid)
+			{
+				mq_ret = mq_send(mq_wronly,(const char *)&msq_header,sizeof(ZwNetwork::MsgHeader) + 1,0);
+				if(mq_ret != 0)
+				{
+					LOG("Message did not send");
+					msg_sent = false;
+				}
+				else
+					msg_sent = true;
+			}
 		}
+		if(!msg_sent)
+		{
+			//TODO free any allocated memory that did not recv an ownership transfer to render thread.
+			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
+
+		}
+	}
+	//Close the msq queue.
+	mq_ret = mq_close(mq_wronly);
+	if(mq_ret != 0)
+	{
+		LOG("Sending queue failed to close, exiting.");
 	}
 	pthread_exit(0);
 }
