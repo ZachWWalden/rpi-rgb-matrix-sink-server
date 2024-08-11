@@ -67,14 +67,6 @@ struct SinkPacket
 	uint8_t *data;
 };
 
-#pragma pack(push,1)
-struct MsgHeader
-{
-	SinkPacket* frame_header;
-};
-#pragma pack(pop)
-
-
 class Network
 {
 	//Attributes

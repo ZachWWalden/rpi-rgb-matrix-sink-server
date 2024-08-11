@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	mq_attr attr;
 	attr.mq_flags = 0;
 	attr.mq_maxmsg = 1;
-	attr.mq_msgsize = sizeof(ZwNetwork::MsgHeader);
+	attr.mq_msgsize = sizeof(ZwNetwork::SinkPacket);
 	attr.mq_curmsgs = 0;
 
 	mq_create = mq_open(MSG_QUEUE_NAME, O_CREAT|O_RDONLY, 0744, &attr);
@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
 			{
 				//Wait for a frame
 				//recv msg
-				ZwNetwork::MsgHeader msg;
-				mq_ret = mq_receive(mq_create, (const char*)&msg, sizeof(ZwNetwork::MsgHeader), NULL);
+				ZwNetwork::SinkPacket msg;
+				mq_ret = mq_receive(mq_create, (const char*)&msg, sizeof(ZwNetwork::SinkPacket), NULL);
 				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(frame));
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
 				graphics_mgr->drawWithMaps(config->getPanelMaps());
@@ -139,8 +139,6 @@ void* networkThread(void* arg)
 			//Handle a single connection.
 			//wait for frame
 			ZwNetwork::SinkPacket packet = interface->read();
-			ZwNetwork::MsgHeader msq_header;
-			msq_header.frame_header = &packet;
 			//Check if termination packet has been sent.
 			if(packet.header.color_mode == 0xFF)
 			{
@@ -150,7 +148,7 @@ void* networkThread(void* arg)
 			//send message.
 			if(connection_valid)
 			{
-				mq_ret = mq_send(mq_wronly,(const char *)&msq_header,sizeof(ZwNetwork::MsgHeader) + 1,0);
+				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket) + 1,0);
 				if(mq_ret != 0)
 				{
 					LOG("Message did not send");
