@@ -79,7 +79,10 @@ void Graphics::draw()
 	{
 		for(int cols = 0; cols < this->width; cols++)
 		{
-			this->SetCanvasPixel(cols, rows, Color(0xFF, this->render_target[rows][cols][0], this->render_target[rows][cols][1], this->render_target[rows][cols][2]));
+			this->SetCanvasPixel(cols, rows, Color(0xFF,	this->render_target[rows][cols][0],
+															this->render_target[rows][cols][1],
+															this->render_target[rows][cols][2])
+												  );
 		}
 	}
 }
@@ -108,7 +111,10 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 			for(int cols = (*itr)->destination.p_top_left.y ;cols <= (*itr)->destination.p_bot_right.y; cols++)
 			{
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF, this->render_target[y][x][0], this->render_target[y][x][1], this->render_target[y][x][2]));
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->render_target[y][x][0],
+																this->render_target[y][x][1],
+																this->render_target[y][x][2])
+													   );
 				if((*itr)->rot_constants.row_major)
 					x += (*itr)->rot_constants.increment.x;
 				else
