@@ -106,8 +106,8 @@ int main(int argc, char *argv[]) {
 				//Wait for a frame
 				//recv msg
 				ZwNetwork::SinkPacket msg;
-				mq_ret = mq_receive(mq_create, (const char*)&msg, sizeof(ZwNetwork::SinkPacket), NULL);
-				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(frame));
+				mq_ret = mq_receive(mq_create, (char*)(&msg), attr.mq_msgsize, NULL);
+				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(msg));
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
 				graphics_mgr->drawWithMaps(config->getPanelMaps());
 			}
