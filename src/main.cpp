@@ -138,6 +138,7 @@ void* networkThread(void* arg)
 		{
 			//Handle a single connection.
 			//wait for frame
+			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
 			ZwNetwork::SinkPacket packet = interface->read();
 			//Check if termination packet has been sent.
 			if(packet.header.color_mode == 0xFF)
@@ -157,12 +158,11 @@ void* networkThread(void* arg)
 				else
 					msg_sent = true;
 			}
-		}
-		if(!msg_sent)
-		{
-			//TODO free any allocated memory that did not recv an ownership transfer to render thread.
-			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
-
+			if(!msg_sent)
+			{
+				//free any allocated memory that did not recv an ownership transfer to render thread.
+				delete packet.data;
+			}
 		}
 	}
 	//Close the msq queue.
