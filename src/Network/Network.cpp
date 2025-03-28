@@ -30,11 +30,13 @@
  */
 
 #include "Network.hpp"
+#include <cstdint>
 #include <cstdlib>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <cstring>
 #include <string>
+#include <sys/socket.h>
 
 #include "../Logging/Logging.hpp"
 
@@ -46,16 +48,64 @@ Network::Network()
 
 }
 
+Network::Network(uint16_t port)
+{
+	//create socket
+	//ipv4, tcp, ip protocol
+	int status = this->server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if(status != SUCCESS)
+	{
+		LOG("Server socket creation failed");
+		exit(EXIT_FAILURE);
+	}
+	status = setsockopt(int fd, int level, int optname, const void *optval, socklen_t optlen);
+	if(status != SUCCESS)
+	{
+		LOG("Socket options failed to set");
+		exit(EXIT_FAILURE);
+	}
+	status = bind(this->server_fd, const struct sockaddr *addr, socklen_t addrlen);
+	if(status != SUCCESS)
+	{
+		LOG("Socket failed to bind");
+		exit(EXIT_FAILURE);
+	}
+	//Listen on socket for connections with a maximum of 5 connections in the backlog.
+	status = listen(this->server_fd, 5);
+	if(status != SUCCESS)
+	{
+		LOG("Socket failed to begin listening");
+		exit(EXIT_FAILURE);
+	}
+}
+
 Network::~Network()
 {
 }
 
+bool Network::waitForConnection()
+{
+	this->client_fd = accept(this->server_fd, struct sockaddr *__restrict addr, socklen_t *__restrict addr_len);
+	//verify connection
+	//if not verified, recycle conenction, ret false
+	//if verified return true.
+}
+
+SinkPacket Network::readPacket()
+{
+	//read header
+	//ensure the data payload is reasonably sized.
+	//allocate on the heap for payload.
+	//return packet.
+}
+
+bool Network::writePacket(uint8_t num_bytes, uint8_t* data)
+{
+	return true;
 }
 
 
-
-
-
+}
 
 
 

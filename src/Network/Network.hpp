@@ -37,7 +37,6 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -73,7 +72,7 @@ class Network
 public:
 
 private:
-	int server_fd;
+	int server_fd, client_fd;
 	sockaddr_in addr;
 	SinkPacketHeader header;
 	//Methods
@@ -82,9 +81,9 @@ public:
 	Network(uint16_t port);
 	~Network();
 
-	bool listen();
-	SinkPacket read();
-	bool write(uint8_t num_bytes, uint8_t* data);
+	bool waitForConnection();
+	SinkPacket readPacket();
+	bool writePacket(uint8_t num_bytes, uint8_t* data);
 
 private:
 };
