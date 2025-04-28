@@ -38,7 +38,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
+
+#define MAX_H_RES 256
+#define MAX_V_RES 256
+#define MAX_BYTES_PER_PIXEL 4
 
 namespace ZwNetwork{
 
@@ -47,6 +52,10 @@ namespace ZwNetwork{
 #pragma pack(push,1)
 struct SinkPacketHeader
 {
+	//Protocol Version
+	uint8_t protocol_vers;
+	//Priority
+	uint8_t priority;
 	//resolution
 	uint8_t h_res;
 	uint8_t v_res;
@@ -54,8 +63,17 @@ struct SinkPacketHeader
 	uint8_t bytes_per_pixel;
 	//color mode
 	uint8_t color_mode;
+	//Location
+	uint8_t h_loc;
+	uint8_t v_loc;
 	//Display intensity
 	float intensity;
+};
+
+struct HandshakeHeader
+{
+	uint8_t req_protocol_vers;
+	uint8_t success;
 };
 #pragma pack(pop)
 //
@@ -75,6 +93,7 @@ private:
 	int server_fd, client_fd;
 	sockaddr_in addr;
 	SinkPacketHeader header;
+	int opt = 1;
 	//Methods
 public:
 	Network();

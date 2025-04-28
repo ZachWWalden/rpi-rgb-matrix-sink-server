@@ -30,11 +30,13 @@
  */
 
 #include "Network.hpp"
+#include <asm-generic/socket.h>
 #include <cstdint>
 #include <cstdlib>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <cstring>
+#include <netinet/in.h>
 #include <string>
 #include <sys/socket.h>
 
@@ -52,27 +54,28 @@ Network::Network(uint16_t port)
 {
 	//create socket
 	//ipv4, tcp, ip protocol
-	int status = this->server_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if(status != SUCCESS)
+	if((this->server_fd = socket(AF_INET, SOCK_STREAM, 0) < 0))
 	{
 		LOG("Server socket creation failed");
 		exit(EXIT_FAILURE);
 	}
-	status = setsockopt(int fd, int level, int optname, const void *optval, socklen_t optlen);
-	if(status != SUCCESS)
+	if(setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &(this->opt), sizeof(this->opt)))
 	{
 		LOG("Socket options failed to set");
 		exit(EXIT_FAILURE);
 	}
-	status = bind(this->server_fd, const struct sockaddr *addr, socklen_t addrlen);
-	if(status != SUCCESS)
+
+	//Set options for the port address.
+	this->addr.sin_family = AF_INET;				//Internet Protocol
+	this->addr.sin_addr.s_addr = INADDR_ANY;		//Any IP Addr can conenct
+	this->addr.sin_port = htons(port);				//Bind to passed port
+	if(bind(this->server_fd, (struct sockaddr *)(&(this->addr)), sizeof(this->addr)))
 	{
 		LOG("Socket failed to bind");
 		exit(EXIT_FAILURE);
 	}
 	//Listen on socket for connections with a maximum of 5 connections in the backlog.
-	status = listen(this->server_fd, 5);
-	if(status != SUCCESS)
+	if(listen(this->server_fd, 5))
 	{
 		LOG("Socket failed to begin listening");
 		exit(EXIT_FAILURE);
@@ -85,18 +88,66 @@ Network::~Network()
 
 bool Network::waitForConnection()
 {
-	this->client_fd = accept(this->server_fd, struct sockaddr *__restrict addr, socklen_t *__restrict addr_len);
+	bool ret_val = false;
+	socklen_t addr_len = sizeof(this->addr);
+	if((this->client_fd = accept(this->server_fd, (struct sockaddr *)(&(this->addr)), &addr_len)) < 0)
+	{
+		LOG("Failed to connect to client");
+		exit(EXIT_FAILURE);
+	}
 	//verify connection
-	//if not verified, recycle conenction, ret false
+	HandshakeHeader hndshk_hdr;
+	//read handsake packet.
+	int valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+	//if handshake packet indicates a compatible protocol version, send handshake packet with success = 1
+	if(hndshk_hdr.req_protocol_vers == 0x01)
+	{
+		hndshk_hdr.success = 1;
+		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		ret_val = true;
+	}
+	//if not compatible, send client a handshake packet with a compatible protocol version and success = 0
+	//read handshake packet. If success = 1, set protocol version to the received number.
+	if(!ret_val)
+	{
+		hndshk_hdr.success = 0;
+		hndshk_hdr.req_protocol_vers = 1;
+		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+		if(hndshk_hdr.req_protocol_vers == 1)
+		{
+			ret_val = true;
+		}
+	}
+	//else, assume that the handshake has failed.
+	if(!ret_val)
+		close(client_fd);
 	//if verified return true.
+	return ret_val;
 }
 
 SinkPacket Network::readPacket()
 {
+	bool valid_data = true;
 	//read header
+	SinkPacketHeader pckt;
+	int valread = read(this->client_fd, &pckt, sizeof(SinkPacketHeader));
 	//ensure the data payload is reasonably sized.
+	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) < (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
+	{
+		//client is trying to send over 1 MiB of data we define anything more as a malicious.
+		valid_data = false;
+		close(this->client_fd);
+	}
 	//allocate on the heap for payload.
+	int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
+	uint8_t *data = new uint8_t(num_bytes);
+	valread = read(client_fd, data, num_bytes);
+	SinkPacket packet;
+	packet.header = pckt;
+	packet.data = data;
 	//return packet.
+	return packet;
 }
 
 bool Network::writePacket(uint8_t num_bytes, uint8_t* data)
