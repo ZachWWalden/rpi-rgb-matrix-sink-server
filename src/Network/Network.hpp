@@ -104,6 +104,8 @@ public:
 	SinkPacket readPacket();
 	bool writePacket(uint8_t num_bytes, uint8_t* data);
 
+	int closeConnection();
+
 private:
 };
 
