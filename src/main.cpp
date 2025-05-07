@@ -131,7 +131,7 @@ void* networkThread(void* arg)
 	while(!interrupt_received)
 	{
 		//wait for a connection
-		interface->listen();
+		interface->waitForConnection();
 		connection_valid = true;
 		bool msg_sent = false;
 		while(!interrupt_received && connection_valid)
@@ -139,7 +139,7 @@ void* networkThread(void* arg)
 			//Handle a single connection.
 			//wait for frame
 			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
-			ZwNetwork::SinkPacket packet = interface->read();
+			ZwNetwork::SinkPacket packet = interface->readPacket();
 			//Check if termination packet has been sent.
 			if(packet.header.color_mode == 0xFF)
 			{
@@ -164,6 +164,7 @@ void* networkThread(void* arg)
 				delete packet.data;
 			}
 		}
+		interface->closeConnection();
 	}
 	//Close the msq queue.
 	mq_ret = mq_close(mq_wronly);
