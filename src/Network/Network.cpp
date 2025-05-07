@@ -30,7 +30,6 @@
  */
 
 #include "Network.hpp"
-#include <asm-generic/socket.h>
 #include <cstdint>
 #include <cstdlib>
 #include <curl/curl.h>
@@ -98,7 +97,7 @@ bool Network::waitForConnection()
 	//verify connection
 	HandshakeHeader hndshk_hdr;
 	//read handsake packet.
-	int valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+	int valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
 	//if handshake packet indicates a compatible protocol version, send handshake packet with success = 1
 	if(hndshk_hdr.req_protocol_vers == 0x01)
 	{
@@ -113,7 +112,7 @@ bool Network::waitForConnection()
 		hndshk_hdr.success = 0;
 		hndshk_hdr.req_protocol_vers = 1;
 		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
-		valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+		valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
 		if(hndshk_hdr.req_protocol_vers == 1)
 		{
 			ret_val = true;
@@ -131,7 +130,7 @@ SinkPacket Network::readPacket()
 	bool valid_data = true;
 	//read header
 	SinkPacketHeader pckt;
-	int valread = read(this->client_fd, &pckt, sizeof(SinkPacketHeader));
+	int valread = recv(this->client_fd, &pckt, sizeof(SinkPacketHeader), 0);
 	//ensure the data payload is reasonably sized.
 	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) < (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
@@ -142,7 +141,7 @@ SinkPacket Network::readPacket()
 	//allocate on the heap for payload.
 	int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
 	uint8_t *data = new uint8_t(num_bytes);
-	valread = read(client_fd, data, num_bytes);
+	valread = recv(client_fd, data, num_bytes, 0);
 	SinkPacket packet;
 	packet.header = pckt;
 	packet.data = data;
@@ -152,9 +151,17 @@ SinkPacket Network::readPacket()
 
 bool Network::writePacket(uint8_t num_bytes, uint8_t* data)
 {
+	send(this->client_fd, data, num_bytes, 0);
 	return true;
 }
 
+
+int Network::closeConnection()
+{
+	int ret_val  = close(this->client_fd);
+
+	return ret_val;
+}
 
 }
 
