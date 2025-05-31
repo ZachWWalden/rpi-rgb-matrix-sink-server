@@ -98,6 +98,12 @@ bool Network::waitForConnection()
 	HandshakeHeader hndshk_hdr;
 	//read handsake packet.
 	int valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+	if(valread == -1)
+	{
+		LOG("Read handshake from client failed");
+		exit(EXIT_FAILURE);
+	}
+
 	//if handshake packet indicates a compatible protocol version, send handshake packet with success = 1
 	if(hndshk_hdr.req_protocol_vers == 0x01)
 	{
@@ -113,6 +119,11 @@ bool Network::waitForConnection()
 		hndshk_hdr.req_protocol_vers = 1;
 		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
 		valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		if(valread == -1)
+		{
+			LOG("Read handshake from client failed");
+			exit(EXIT_FAILURE);
+		}
 		if(hndshk_hdr.req_protocol_vers == 1)
 		{
 			ret_val = true;
@@ -131,6 +142,11 @@ SinkPacket Network::readPacket()
 	//read header
 	SinkPacketHeader pckt;
 	int valread = recv(this->client_fd, &pckt, sizeof(SinkPacketHeader), 0);
+	if(valread == -1)
+	{
+		LOG("Read handshake from client failed");
+		exit(EXIT_FAILURE);
+	}
 	//ensure the data payload is reasonably sized.
 	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) < (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
@@ -140,8 +156,13 @@ SinkPacket Network::readPacket()
 	}
 	//allocate on the heap for payload.
 	int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
-	uint8_t *data = new uint8_t(num_bytes);
+	uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
 	valread = recv(client_fd, data, num_bytes, 0);
+	if(valread == -1)
+	{
+		LOG("Read handshake from client failed");
+		exit(EXIT_FAILURE);
+	}
 	SinkPacket packet;
 	packet.header = pckt;
 	packet.data = data;

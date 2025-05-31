@@ -733,8 +733,6 @@ uint8_t*** Graphics::flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame
 	uint8_t* buffer = (uint8_t*)frame_packet.data;
 	int num_pixels = frame_packet.header.h_res * frame_packet.header.v_res;
 	int flat_idx = 0;
-	//convert floating point intensity 0.0f <= intensity <= 1.0f to a uint16_t
-	const uint16_t intensity = (uint16_t)(frame_packet.header.intensity * (float)(0xFFFF));
 
 	for(int y = 0; y < frame_packet.header.v_res; y++)
 	{

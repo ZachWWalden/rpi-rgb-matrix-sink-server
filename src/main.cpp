@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
 	//create message queue and and open read only
 	mqd_t mq_create;
-	int mq_ret, i = -1;
+	int mq_ret;
 	mq_attr attr;
 	attr.mq_flags = 0;
 	attr.mq_maxmsg = 1;
@@ -141,7 +141,7 @@ void* networkThread(void* arg)
 			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
 			ZwNetwork::SinkPacket packet = interface->readPacket();
 			//Check if termination packet has been sent.
-			if(packet.header.color_mode == 0xFF)
+			if(packet.header.color_mode == 0xFF || packet.data == nullptr)
 			{
 				LOG("Connection terminated");
 				connection_valid = false;
