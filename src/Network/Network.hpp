@@ -2,14 +2,14 @@
  *Class - Network
  *Author - Zach Walden
  *Created - 4/17/2024
- *Last Changed - 4/17/2024
+ *Last Changed - 6/7/2025
  *Description - Stateful manager of frame sources using bare linux sockets
 ====================================================================================*/
 
 /*
- * This program source code file is part of PROJECT_NAME
+ * This program source code file is part of rpi-rgb-matrix-sink-server
  *
- * Copyright (C) 2024 Zachary Walden zachary.walden@eagles.oc.edu
+ * Copyright (C) 2024-2025 Zachary Walden zachary.walden@eagles.oc.edu
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
