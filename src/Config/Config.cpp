@@ -94,7 +94,7 @@ bool Config::readConfigFile()
 	//get panel vres
 	this->panel_vres = root["panel_vres"].asInt();
 	//get num chains
-	this->chain_length = root["num_chains"].asInt();
+	this->num_chains = root["num_chains"].asInt();
 	//get chain length
 	this->chain_length = root["chain_length"].asInt();
 
