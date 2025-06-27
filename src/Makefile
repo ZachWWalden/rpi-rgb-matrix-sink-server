@@ -43,6 +43,8 @@ $(TARGET): $(RGB_LIBRARY) $(OBJECTS)
 
 clean:
 	@rm -rf $(OBJDIR) $(DEPDIR) $(TARGET)
+	@rm $(RGB_LIBDIR)/*.o
+	@rm $(RGB_LIBDIR)/librgbmatrix.so.1
 
 FORCE:
 .PHONY: FORCE
