@@ -93,7 +93,6 @@ private:
 	int server_fd, client_fd;
 	sockaddr_in addr;
 	SinkPacketHeader header;
-	int opt = 1;
 	//Methods
 public:
 	Network();
