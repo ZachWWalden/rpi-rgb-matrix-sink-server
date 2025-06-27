@@ -50,7 +50,8 @@ Network::Network(uint16_t port)
 		LOG("Server socket creation failed");
 		exit(EXIT_FAILURE);
 	}
-	if(setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &(this->opt), sizeof(this->opt)))
+	int opt = 1;
+	if(setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
 	{
 		LOG("Socket options failed to set");
 		exit(EXIT_FAILURE);
