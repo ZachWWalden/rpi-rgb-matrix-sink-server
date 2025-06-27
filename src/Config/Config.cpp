@@ -36,9 +36,9 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <json/config.h>
-#include <json/reader.h>
-#include <json/value.h>
+#include <jsoncpp/json/config.h>
+#include <jsoncpp/json/reader.h>
+#include <jsoncpp/json/value.h>
 
 namespace ZwConfig
 {
