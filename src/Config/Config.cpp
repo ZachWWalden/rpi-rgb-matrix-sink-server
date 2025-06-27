@@ -172,6 +172,8 @@ RotationConstants Config::getRotConstants(int rot)
 		LOG("Invalid Rotation constant. Valid values are: 0, +-90, +-180, +-270");
 		exit(EXIT_FAILURE);
 	}
+
+	return RotationConstants(ZwGraphics::Vec2I(h_offset, v_offset), ZwGraphics::Vec2I(h_increment, v_increment), row_major);
 }
 
 std::vector<PanelMap*>* Config::getPanelMaps()
