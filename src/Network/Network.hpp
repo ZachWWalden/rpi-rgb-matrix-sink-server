@@ -45,6 +45,8 @@
 #define MAX_V_RES 256
 #define MAX_BYTES_PER_PIXEL 4
 
+#define PROTOCOL_VERSION 0x00
+
 namespace ZwNetwork{
 
 //8 byte header
