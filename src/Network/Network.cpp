@@ -32,8 +32,6 @@
 #include "Network.hpp"
 #include <cstdint>
 #include <cstdlib>
-#include <curl/curl.h>
-#include <curl/easy.h>
 #include <cstring>
 #include <netinet/in.h>
 #include <string>
