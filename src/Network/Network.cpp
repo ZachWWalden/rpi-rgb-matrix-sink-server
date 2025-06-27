@@ -64,7 +64,7 @@ Network::Network(uint16_t port)
 			LOG("ENOPROTOOPT");
 		else if(errno == ENOTSOCK)
 			LOG("ENOTSOCK");
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 
 	//Set options for the port address.
