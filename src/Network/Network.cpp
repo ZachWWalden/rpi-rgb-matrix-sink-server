@@ -51,7 +51,7 @@ Network::Network(uint16_t port)
 		exit(EXIT_FAILURE);
 	}
 	int opt = 1;
-	if(setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if(setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
 	{
 		LOG("Socket options failed to set");
 		exit(EXIT_FAILURE);
