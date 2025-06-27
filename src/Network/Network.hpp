@@ -30,13 +30,12 @@
  */
 #pragma once
 
-#include <cstdlib>
+#include <stdlib.h>
 #include <string>
-#include <cstdint>
+#include <stdint.h>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <sys/socket.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 #define MAX_H_RES 256
