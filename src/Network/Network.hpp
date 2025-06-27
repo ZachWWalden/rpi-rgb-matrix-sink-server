@@ -38,6 +38,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define MAX_H_RES 256
 #define MAX_V_RES 256
