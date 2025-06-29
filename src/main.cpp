@@ -95,6 +95,7 @@ int main(int argc, char *argv[]) {
 	ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
 	ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
 
+	LOG_INT(config->port);
 	//start network thread and wait for data.
 	long unsigned int tid;
 	pthread_create(&tid, NULL, networkThread, &(config->port));

@@ -97,6 +97,7 @@ bool Network::waitForConnection()
 		LOG("Failed to connect to client");
 		exit(EXIT_FAILURE);
 	}
+	LOG("After accept()");
 	//verify connection
 	HandshakeHeader hndshk_hdr;
 	//read handsake packet.
