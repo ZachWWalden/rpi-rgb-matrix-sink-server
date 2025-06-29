@@ -113,6 +113,10 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 		{
 			for(int cols = (*itr)->destination.p_top_left.y ;cols <= (*itr)->destination.p_bot_right.y; cols++)
 			{
+				LOG("Source Point:");
+				LOG_POINT(x,y);
+				LOG("Dest Point:");
+				LOG_POINT(cols,rows);
 				//Write pixel to canvas
 				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->render_target[y][x][0],
 																this->render_target[y][x][1],
