@@ -97,11 +97,10 @@ bool Network::waitForConnection()
 		LOG("Failed to connect to client");
 		exit(EXIT_FAILURE);
 	}
-	LOG("After accept()");
 	//verify connection
 	HandshakeHeader hndshk_hdr;
 	//read handsake packet.
-	int valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+	int valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
 	if(valread == -1)
 	{
 		LOG("Read handshake from client failed");
@@ -122,7 +121,7 @@ bool Network::waitForConnection()
 		hndshk_hdr.success = 0;
 		hndshk_hdr.req_protocol_vers = 1;
 		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
-		valread = recv(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
 		if(valread == -1)
 		{
 			LOG("Read handshake from client failed");
@@ -145,7 +144,7 @@ SinkPacket Network::readPacket()
 	bool valid_data = true;
 	//read header
 	SinkPacketHeader pckt;
-	int valread = recv(this->client_fd, &pckt, sizeof(SinkPacketHeader), 0);
+	int valread = read(this->client_fd, &pckt, sizeof(SinkPacketHeader));
 	if(valread == -1)
 	{
 		LOG("Read handshake from client failed");
@@ -161,7 +160,7 @@ SinkPacket Network::readPacket()
 	//allocate on the heap for payload.
 	int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
 	uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
-	valread = recv(client_fd, data, num_bytes, 0);
+	valread = read(client_fd, data, num_bytes);
 	if(valread == -1)
 	{
 		LOG("Read handshake from client failed");
