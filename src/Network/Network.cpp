@@ -214,7 +214,7 @@ SinkPacket Network::readPacket()
 	if(valid_data)
 	{
 		//allocate on the heap for payload.
-		int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
+		int num_bytes = (int)pckt.bytes_per_pixel * (v_res_full * h_res_full);
 		uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
 		valread = read(client_fd, data, num_bytes);
 		if(valread == -1)
