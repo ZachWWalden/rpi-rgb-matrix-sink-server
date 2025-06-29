@@ -194,7 +194,8 @@ SinkPacket Network::readPacket()
 	LOG("");
 	LOG("");
 	//ensure the data payload is reasonably sized.
-	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) > (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
+	int h_res_full = pckt.h_res + 1, v_res_full = pckt.v_res + 1;
+	if((pckt.bytes_per_pixel * ((h_res_full) * (v_res_full))) > (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
 		//client is trying to send over 1 MiB of data we define anything more as a malicious.
 		LOG("Packet too big");
