@@ -191,6 +191,7 @@ SinkPacket Network::readPacket()
 	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) < (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
 		//client is trying to send over 1 MiB of data we define anything more as a malicious.
+		LOG("Packet too big");
 		valid_data = false;
 		close(this->client_fd);
 	}
