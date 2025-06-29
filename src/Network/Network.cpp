@@ -187,8 +187,14 @@ SinkPacket Network::readPacket()
 		LOG("Read frame packet from client failed");
 		exit(EXIT_FAILURE);
 	}
+	LOG("");
+	LOG("");
+	LOG_POINT(pckt.h_res, pckt.v_res);
+	LOG_INT(pckt.bytes_per_pixel);
+	LOG("");
+	LOG("");
 	//ensure the data payload is reasonably sized.
-	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) < (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
+	if((pckt.bytes_per_pixel * ((pckt.h_res + 1) * (pckt.v_res + 1))) > (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
 		//client is trying to send over 1 MiB of data we define anything more as a malicious.
 		LOG("Packet too big");
