@@ -215,7 +215,9 @@ SinkPacket Network::readPacket()
 	{
 		//allocate on the heap for payload.
 		int num_bytes = (int)pckt.bytes_per_pixel * (v_res_full * h_res_full);
-		uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
+		LOG("Start malloc in network obj");
+		uint8_t *data = new uint8_t(num_bytes);
+		LOG("End malloc in network obj");
 		valread = read(client_fd, data, num_bytes);
 		if(valread == -1)
 		{
