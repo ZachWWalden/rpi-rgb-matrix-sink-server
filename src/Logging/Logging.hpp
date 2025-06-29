@@ -29,12 +29,14 @@
 #define LOG(x) std::cout << x << std::endl
 #define LOG_INT(x) std::cout << std::endl << std::hex << (int)x << std::endl
 #define LOG_POINT(x, y) std::cout << std::hex << "X = " << (int)x << ", Y = " << (int)y << std::endl
+#define LOG_COLOR(r,g,b) std::cout << std::hex << "Red = " << r << ", Green = " << g << ", Blue = " << b << std::endl;
 #define LOGV(x,y) std::cout << x << y << std::endl
 #define LOG_IO(x,y,z) std::cout << "Error with File:" << x << x << z << std::endl
 #else
 #define LOG(X)
 #define LOG_INT(x)
 #define LOG_POINT(x, y)
+#define LOG_COLOR(r, g, b)
 #define LOGV(x,y)
 #define LOG_IO(x, y, z)
 #endif
