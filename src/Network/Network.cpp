@@ -184,7 +184,7 @@ SinkPacket Network::readPacket()
 	int valread = read(this->client_fd, &pckt, sizeof(SinkPacketHeader));
 	if(valread == -1)
 	{
-		LOG("Read handshake from client failed");
+		LOG("Read frame packet from client failed");
 		exit(EXIT_FAILURE);
 	}
 	//ensure the data payload is reasonably sized.
@@ -200,7 +200,7 @@ SinkPacket Network::readPacket()
 	valread = read(client_fd, data, num_bytes);
 	if(valread == -1)
 	{
-		LOG("Read handshake from client failed");
+		LOG("Read frame data from client failed");
 		exit(EXIT_FAILURE);
 	}
 	SinkPacket packet;
