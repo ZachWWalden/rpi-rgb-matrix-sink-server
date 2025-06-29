@@ -127,7 +127,7 @@ bool Network::waitForConnection()
 	}
 
 	//if handshake packet indicates a compatible protocol version, send handshake packet with success = 1
-	if(hndshk_hdr.req_protocol_vers == 0x01)
+	if(hndshk_hdr.req_protocol_vers == PROTOCOL_VERSION)
 	{
 		hndshk_hdr.success = 1;
 		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
@@ -146,7 +146,7 @@ bool Network::waitForConnection()
 			LOG("Read handshake from client failed");
 			exit(EXIT_FAILURE);
 		}
-		if(hndshk_hdr.req_protocol_vers == 1)
+		if(hndshk_hdr.req_protocol_vers == PROTOCOL_VERSION)
 		{
 			ret_val = true;
 		}
