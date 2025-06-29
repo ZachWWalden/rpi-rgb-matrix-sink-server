@@ -45,7 +45,7 @@ Network::Network(uint16_t port)
 {
 	//create socket
 	//ipv4, tcp, ip protocol
-	if((this->server_fd = socket(AF_INET, SOCK_STREAM, 0) < 0))
+	if((this->server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		LOG("Server socket creation failed");
 		exit(EXIT_FAILURE);
@@ -59,7 +59,7 @@ Network::Network(uint16_t port)
 		else if(errno == EFAULT)
 			LOG("EFAULT");
 		else if(errno == EINVAL)
-			LOG("EINVAL");	
+			LOG("EINVAL");
 		else if(errno == ENOPROTOOPT)
 			LOG("ENOPROTOOPT");
 		else if(errno == ENOTSOCK)
