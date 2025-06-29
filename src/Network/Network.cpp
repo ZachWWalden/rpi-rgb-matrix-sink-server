@@ -32,6 +32,7 @@
 #include "Network.hpp"
 
 #include "../Logging/Logging.hpp"
+#include <cerrno>
 
 namespace ZwNetwork
 {
@@ -104,6 +105,24 @@ bool Network::waitForConnection()
 	if(valread == -1)
 	{
 		LOG("Read handshake from client failed");
+		if(errno == EAGAIN)
+			LOG("EAGAIN");
+		else if(errno == EWOULDBLOCK)
+			LOG("EWOULDBLOCK");
+		else if(errno == EBADF)
+			LOG("EBADF");
+		else if(errno == EFAULT)
+			LOG("EFAULT");
+		else if(errno == EINTR)
+			LOG("EINTR");
+		else if(errno == EINVAL)
+			LOG("EINVAL");
+		else if(errno == EIO)
+			LOG("EIO");
+		else if(errno == EISDIR)
+			LOG("EISDIR");
+		else
+			LOG_INT(errno);
 		exit(EXIT_FAILURE);
 	}
 
