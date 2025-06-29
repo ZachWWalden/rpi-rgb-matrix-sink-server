@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 	mq_attr attr;
 	attr.mq_flags = 0;
 	attr.mq_maxmsg = 1;
-	attr.mq_msgsize = sizeof(ZwNetwork::SinkPacket) + 1;
+	attr.mq_msgsize = sizeof(ZwNetwork::SinkPacket);
 	attr.mq_curmsgs = 0;
 
 	mq_create = mq_open(MSG_QUEUE_NAME, O_CREAT|O_RDONLY, 0744, &attr);
@@ -152,7 +152,7 @@ void* networkThread(void* arg)
 			//send message.
 			if(connection_valid)
 			{
-				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket) + 1,0);
+				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket),0);
 				if(mq_ret != 0)
 				{
 					LOG("Message did not send");
