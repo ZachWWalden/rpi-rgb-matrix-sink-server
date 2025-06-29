@@ -152,7 +152,7 @@ void* networkThread(void* arg)
 			//send message.
 			if(connection_valid)
 			{
-				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket) + 1,0);
+				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket),0);
 				if(mq_ret != 0)
 				{
 					LOG("Message did not send");
