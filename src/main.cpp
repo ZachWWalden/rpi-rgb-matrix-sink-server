@@ -4,6 +4,7 @@
 //
 // This code is public domain
 // (but note, that the led-matrix library this depends on is GPL v2)
+#include <cerrno>
 #include <cstddef>
 #include <cstdlib>
 #include <cstdint>
@@ -104,6 +105,7 @@ int main(int argc, char *argv[]) {
 	{
 			if(connection_valid)
 			{
+				LOG("Valid Connection");
 				//Wait for a frame
 				//recv msg
 				ZwNetwork::SinkPacket msg;
@@ -154,6 +156,20 @@ void* networkThread(void* arg)
 				if(mq_ret != 0)
 				{
 					LOG("Message did not send");
+					if(errno == EAGAIN)
+						LOG("EAGAIN");
+					else if(errno == EBADF)
+						LOG("EBADF");
+					else if(errno == EINTR)
+						LOG("EINTR");
+					else if(errno == EINVAL)
+						LOG("EINVAL");
+					else if(errno == EMSGSIZE)
+						LOG("EMSGSIZE");
+					else if(errno == ETIMEDOUT)
+						LOG("ETIMEDOUT");
+					else
+						LOG_INT(errno);
 					msg_sent = false;
 				}
 				else
