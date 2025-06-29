@@ -41,7 +41,7 @@
 #include <errno.h>
 
 #define MAX_H_RES 256
-#define MAX_V_RES 256
+#define MAX_V_RES 192
 #define MAX_BYTES_PER_PIXEL 4
 
 #define PROTOCOL_VERSION 0x00

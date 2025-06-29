@@ -192,21 +192,31 @@ SinkPacket Network::readPacket()
 	{
 		//client is trying to send over 1 MiB of data we define anything more as a malicious.
 		LOG("Packet too big");
+		LOG("");
+		LOG("");
+		LOG_POINT(pckt.h_res, pckt.v_res);
+		LOG_INT(pckt.bytes_per_pixel);
+		LOG("");
+		LOG("");
 		valid_data = false;
 		close(this->client_fd);
 	}
-	//allocate on the heap for payload.
-	int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
-	uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
-	valread = read(client_fd, data, num_bytes);
-	if(valread == -1)
-	{
-		LOG("Read frame data from client failed");
-		exit(EXIT_FAILURE);
-	}
 	SinkPacket packet;
 	packet.header = pckt;
-	packet.data = data;
+	packet.data = nullptr;
+	if(valid_data)
+	{
+		//allocate on the heap for payload.
+		int num_bytes = (int)pckt.bytes_per_pixel * ((int)pckt.v_res + 1) * ((int)pckt.h_res + 1);
+		uint8_t *data = (valid_data) ? new uint8_t(num_bytes) : nullptr;
+		valread = read(client_fd, data, num_bytes);
+		if(valread == -1)
+		{
+			LOG("Read frame data from client failed");
+			exit(EXIT_FAILURE);
+		}
+		packet.data = data;
+	}
 	//return packet.
 	return packet;
 }
