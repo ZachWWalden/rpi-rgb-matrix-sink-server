@@ -625,7 +625,7 @@ void Graphics::setWidth(uint8_t width)
 
 void Graphics::SetCanvasPixel(uint8_t x, uint8_t y, Color color)
 {
-	this->canvas->SetPixel(x, y, color.red, color.blue, color.green);
+	this->canvas->SetPixel(x, y, color.red, color.green, color.blue);
 }
 
 void Graphics::setRenderTarget(uint8_t*** render_target)
