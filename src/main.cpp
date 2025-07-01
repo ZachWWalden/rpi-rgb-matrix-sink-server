@@ -138,7 +138,8 @@ void* networkThread(void* arg)
 	//open msg queue write only
 	mqd_t mq_wronly;
 	mq_wronly = mq_open(MSG_QUEUE_NAME, O_WRONLY);
-	int mq_ret = -1;
+	// int mq_ret = -1;
+	int mq_ret = 0;
 	while(!interrupt_received)
 	{
 		//wait for a connection
@@ -160,7 +161,7 @@ void* networkThread(void* arg)
 			//send message.
 			if(connection_valid)
 			{
-				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket),0);
+				//mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket),0);
 				if(mq_ret != 0)
 				{
 					LOG("Message did not send");
