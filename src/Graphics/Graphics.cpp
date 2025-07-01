@@ -760,9 +760,9 @@ uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)
 		for(int x = 0; x < frame_packet.header.h_res + 1 && flat_idx < num_pixels; x++)
 		{
 			//Code borrowed from Desmume under GPL2
-			rgb888[y][x][0] = this->five_bit_to_eight_bit[((buffer[flat_idx] <<  3) & 0xF1)];
-			rgb888[y][x][1] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  2) & 0xF1)];
-			rgb888[y][x][2] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  7) & 0xF1)];
+			rgb888[y][x][0] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  0) & 0x1F)];
+			rgb888[y][x][1] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  5) & 0x1F)];
+			rgb888[y][x][2] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  10) & 0x1F)];
 			flat_idx++;
 		}
 	}
