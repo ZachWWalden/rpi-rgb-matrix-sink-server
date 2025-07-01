@@ -267,6 +267,9 @@ int Network::send_all(int sock_fd, const void* buf, size_t size, int flags)
 			break;
 	}while(((unsigned long)bytes_sent) < size);
 
+	if(bytes_sent != size)
+		LOG("Send mismatch");
+
 	return bytes_sent;
 }
 
@@ -279,6 +282,9 @@ int Network::recv_all(int sockfd, void *buf, size_t size)
 		if(bytes_recvd == -1)
 			break;
 	}while(((unsigned long)bytes_recvd) < size);
+
+	if(bytes_recvd != size)
+		LOG("Recv mismatch");
 
 	return bytes_recvd;
 }

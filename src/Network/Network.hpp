@@ -50,7 +50,7 @@ namespace ZwNetwork{
 
 //8 byte header
 //Ensure there is no padding in structures bewteen the pac(push) and pack(pop).
-//#pragma pack(push,1)
+#pragma pack(push,1)
 struct SinkPacketHeader
 {
 	//Protocol Version
@@ -76,7 +76,7 @@ struct HandshakeHeader
 	uint8_t req_protocol_vers;
 	uint8_t success;
 };
-//#pragma pack(pop)
+#pragma pack(pop)
 //
 
 struct SinkPacket
