@@ -33,6 +33,7 @@
 
 #include "../Logging/Logging.hpp"
 #include <cerrno>
+#include <cstdlib>
 
 namespace ZwNetwork
 {
@@ -101,7 +102,8 @@ bool Network::waitForConnection()
 	//verify connection
 	HandshakeHeader hndshk_hdr;
 	//read handsake packet.
-	int valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+	int valsend;
+	int valread = this->recv_all(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
 	if(valread == -1)
 	{
 		LOG("Read first handshake from client failed");
@@ -130,7 +132,12 @@ bool Network::waitForConnection()
 	if(hndshk_hdr.req_protocol_vers == PROTOCOL_VERSION)
 	{
 		hndshk_hdr.success = 1;
-		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		valsend = this->send_all(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		if(valsend == -1)
+		{
+			LOG("Handshake packet success send failed");
+			exit(EXIT_FAILURE);
+		}
 		ret_val = true;
 	}
 	//if not compatible, send client a handshake packet with a compatible protocol version and success = 0
@@ -139,8 +146,14 @@ bool Network::waitForConnection()
 	{
 		hndshk_hdr.success = 0;
 		hndshk_hdr.req_protocol_vers = 1;
-		send(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
-		valread = read(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
+		valsend = this->send_all(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader), 0);
+		if(valsend == -1)
+		{
+			LOG("Handshake packet retry send failed");
+			exit(EXIT_FAILURE);
+		}
+
+		valread = this->recv_all(this->client_fd, &hndshk_hdr, sizeof(HandshakeHeader));
 		if(valread == -1)
 		{
 			LOG("Read second handshake from client failed");
@@ -181,7 +194,7 @@ SinkPacket Network::readPacket()
 	bool valid_data = true;
 	//read header
 	SinkPacketHeader pckt;
-	int valread = read(this->client_fd, &pckt, sizeof(SinkPacketHeader));
+	int valread = this->recv_all(this->client_fd, &pckt, sizeof(SinkPacketHeader));
 	if(valread == -1)
 	{
 		LOG("Read frame packet from client failed");
@@ -218,7 +231,7 @@ SinkPacket Network::readPacket()
 		LOG("Start malloc in network obj");
 		uint8_t *data = new uint8_t(num_bytes);
 		LOG("End malloc in network obj");
-		valread = read(client_fd, data, num_bytes);
+		valread = this->recv_all(client_fd, data, num_bytes);
 		if(valread == -1)
 		{
 			LOG("Read frame data from client failed");
@@ -242,6 +255,32 @@ int Network::closeConnection()
 	int ret_val  = close(this->client_fd);
 
 	return ret_val;
+}
+
+int Network::send_all(int sock_fd, const void* buf, size_t size, int flags)
+{
+	long bytes_sent = 0;
+	do
+	{
+		bytes_sent += send(sock_fd, ((uint8_t* )buf) + bytes_sent, size - bytes_sent, flags);
+		if(bytes_sent == -1)
+			break;
+	}while(((unsigned long)bytes_sent) < size);
+
+	return bytes_sent;
+}
+
+int Network::recv_all(int sockfd, void *buf, size_t size)
+{
+	long bytes_recvd = 0;
+	do
+	{
+		bytes_recvd += read(sockfd, ((uint8_t*)buf) + bytes_recvd, size - bytes_recvd);
+		if(bytes_recvd == -1)
+			break;
+	}while(((unsigned long)bytes_recvd) < size);
+
+	return bytes_recvd;
 }
 
 }
