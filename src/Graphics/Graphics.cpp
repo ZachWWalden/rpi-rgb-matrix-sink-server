@@ -742,7 +742,7 @@ uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)
 	if(frame_packet.data == nullptr)
 		return nullptr;
 	LOG("rgb555torgb888 not null");
-	//uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res + 1, frame_packet.header.h_res + 1, 3, 0x00);
+	uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res + 1, frame_packet.header.h_res + 1, 3, 0x00);
 	uint16_t* buffer = (uint16_t*)frame_packet.data;
 	int num_pixels = (frame_packet.header.h_res + 1) * (frame_packet.header.v_res + 1);
 	LOG("Num Pixels:");
@@ -754,17 +754,16 @@ uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)
 		for(int x = 0; x < frame_packet.header.h_res + 1 && flat_idx < num_pixels; x++)
 		{
 			//Code borrowed from Desmume under GPL2
-	//		rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] >>  0) & 0x1F)));
-	//		rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  5) & 0x1F)) );
-	//		rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  10) & 0x1F)) );
+			rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] >>  0) & 0x1F)));
+			rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  5) & 0x1F)) );
+			rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  10) & 0x1F)) );
 			flat_idx++;
 		}
 	}
 
 	delete frame_packet.data;
 
-	//return rgb888;
-	return nullptr;
+	return rgb888;
 }
 
 uint8_t*** Graphics::flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame_packet)
