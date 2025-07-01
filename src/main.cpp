@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 	defaults.chain_length = config->chain_length;
 	defaults.parallel = config->num_chains;
 	//This sets the default brightness.
-	defaults.brightness = 50;
+	defaults.brightness = 100;
 	defaults.scan_mode = 0;
 	defaults.show_refresh_rate = true;
 	Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
