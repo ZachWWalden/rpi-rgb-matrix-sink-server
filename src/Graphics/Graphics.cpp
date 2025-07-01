@@ -43,6 +43,12 @@ namespace ZwGraphics
 	const Color Graphics::CYAN(255,0,255,255);
 	const Color Graphics::TRANSPARENT(0,0,0,0);
 
+
+	const uint8_t five_bit_to_eight_bit[] = {0,   8,   16,  24,  32,  40,  48,  56,
+											 64,  72,  80,  88,  96,  104, 112, 120,
+											 128, 136, 144, 152, 160, 168, 176, 184,
+											 192, 200, 208, 216, 224, 232, 240, 255};
+
 Graphics::Graphics(Canvas* canvas, uint8_t height, uint8_t width)
 {
 		this->canvas = canvas;
@@ -754,9 +760,9 @@ uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)
 		for(int x = 0; x < frame_packet.header.h_res + 1 && flat_idx < num_pixels; x++)
 		{
 			//Code borrowed from Desmume under GPL2
-			rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] <<  3) & 0xF1)));
-			rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  2) & 0xF1)) );
-			rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  7) & 0xF1)) );
+			rgb888[y][x][0] = this->five_bit_to_eight_bit[((buffer[flat_idx] <<  3) & 0xF1)];
+			rgb888[y][x][1] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  2) & 0xF1)];
+			rgb888[y][x][2] = this->five_bit_to_eight_bit[((buffer[flat_idx] >>  7) & 0xF1)];
 			flat_idx++;
 		}
 	}

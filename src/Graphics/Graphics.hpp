@@ -21,6 +21,9 @@ class Graphics
 		static const Color MAGENTA;
 		static const Color CYAN;
 		static const Color TRANSPARENT;
+
+		static const uint8_t five_bit_to_eight_bit[];
+
 	private:
 		Canvas* canvas = nullptr;
 		uint8_t height;
