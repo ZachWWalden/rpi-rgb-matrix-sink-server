@@ -33,6 +33,7 @@
 
 #include "../Logging/Logging.hpp"
 #include <cerrno>
+#include <cstdint>
 #include <cstdlib>
 
 namespace ZwNetwork
@@ -229,7 +230,7 @@ SinkPacket Network::readPacket()
 		int num_bytes = (int)pckt.bytes_per_pixel * (v_res_full * h_res_full);
 		LOG_INT(num_bytes);
 		LOG("Start malloc in network obj");
-		uint8_t *data = new uint8_t(num_bytes);
+		uint8_t *data = (uint8_t*) calloc(num_bytes, 1);
 		LOG("End malloc in network obj");
 		valread = this->recv_all(client_fd, data, num_bytes);
 		if(valread == -1)
