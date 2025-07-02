@@ -70,7 +70,7 @@ Network::Network(uint16_t port)
 			LOG("ENOTSOCK");
 		exit(EXIT_FAILURE);
 	}
-	opt = 0x00C00000;
+	opt = 0x01000000;
 	if(setsockopt(this->server_fd, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt)))
 	{
 		LOG("Socket options failed to set");
