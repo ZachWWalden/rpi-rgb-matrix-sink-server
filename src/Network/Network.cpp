@@ -32,6 +32,7 @@
 #include "Network.hpp"
 
 #include "../Logging/Logging.hpp"
+#include <asm-generic/socket.h>
 #include <cerrno>
 #include <cstdint>
 #include <cstdlib>
@@ -67,7 +68,23 @@ Network::Network(uint16_t port)
 			LOG("ENOPROTOOPT");
 		else if(errno == ENOTSOCK)
 			LOG("ENOTSOCK");
-		//exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
+	}
+	opt = 0x00C00000;
+	if(setsockopt(this->server_fd, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt)))
+	{
+		LOG("Socket options failed to set");
+		if(errno == EBADF)
+			LOG("EBADF");
+		else if(errno == EFAULT)
+			LOG("EFAULT");
+		else if(errno == EINVAL)
+			LOG("EINVAL");
+		else if(errno == ENOPROTOOPT)
+			LOG("ENOPROTOOPT");
+		else if(errno == ENOTSOCK)
+			LOG("ENOTSOCK");
+		exit(EXIT_FAILURE);
 	}
 
 	//Set options for the port address.
