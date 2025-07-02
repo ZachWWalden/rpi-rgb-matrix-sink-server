@@ -29,9 +29,11 @@
 #define LOG(x) std::cout << x << std::endl
 #define LOG_INT(x) std::cout << std::endl << std::hex << (int)x << std::endl
 #define LOG_POINT(x, y) std::cout << std::hex << "X = " << (int)x << ", Y = " << (int)y << std::endl
-#define LOG_COLOR(r,g,b) std::cout << std::hex << "Red = " << (int)r << ", Green = " << (int)g << ", Blue = " << (int)b << std::endl;
+#define LOG_COLOR(r,g,b) std::cout << std::hex << "Red = " << (int)r << ", Green = " << (int)g << ", Blue = " << (int)b << std::endl
 #define LOGV(x,y) std::cout << x << y << std::endl
 #define LOG_IO(x,y,z) std::cout << "Error with File:" << x << x << z << std::endl
+#define CUR_TIME() std::chrono::high_resolution_clock::now()
+#define LOG_DELTA(x, y) std::cout << (long)(std::chrono::duration_cast<std::chrono::microseconds>(y - x)) << " uSec" << std::endl
 #else
 #define LOG(X)
 #define LOG_INT(x)
@@ -39,4 +41,6 @@
 #define LOG_COLOR(r, g, b)
 #define LOGV(x,y)
 #define LOG_IO(x, y, z)
+#define CUR_TIME()
+#define LOG_DELTA(x, y)
 #endif
