@@ -26,12 +26,9 @@
 #include <sys/stat.h>
 #include <mqueue.h>
 
-#include "Graphics/Graphics.hpp"
+#include "Logging/Logging.hpp"
 #include "Utils/triplepointer.hpp"
-#include "Config/Config.hpp"
 #include "Network/Network.hpp"
-using rgb_matrix::RGBMatrix;
-using rgb_matrix::Canvas;
 
 #define MSG_QUEUE_NAME "/rpimatrixsinkserver"
 
@@ -46,25 +43,6 @@ static void InterruptHandler(int signo) {
 }
 
 int main(int argc, char *argv[]) {
-	ZwConfig::Config* config = new ZwConfig::Config();
-
-	if(!config->is_valid)
-		return EXIT_FAILURE;
-
-	RGBMatrix::Options defaults;
-	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
-	defaults.rows = config->panel_vres;
-	defaults.cols = config->panel_hres;
-	defaults.chain_length = config->chain_length;
-	defaults.parallel = config->num_chains;
-	//This sets the default brightness.
-	defaults.brightness = 100;
-	defaults.scan_mode = 0;
-	defaults.show_refresh_rate = true;
-	Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
-	if (canvas == NULL)
-		return 1;
-
 	//create message queue and and open read only
 	mqd_t mq_create;
 	int mq_ret;
@@ -92,14 +70,10 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	ZwGraphics::Graphics *graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
-	ZwGraphics::Font font916 = graphics_mgr->fontFactory(ZwGraphics::Font9x16);
-	ZwGraphics::Font font79 = graphics_mgr->fontFactory(ZwGraphics::Font7x9);
-
-	LOG_INT(config->port);
 	//start network thread and wait for data.
 	long unsigned int tid;
-	pthread_create(&tid, NULL, networkThread, &(config->port));
+	uint16_t port = 47648;
+	pthread_create(&tid, NULL, networkThread, &port);
 
 	while(!interrupt_received)
 	{
@@ -117,18 +91,15 @@ int main(int argc, char *argv[]) {
 				}
 				LOG("MSG Received");
 				ZwNetwork::SinkPacket *msg = (ZwNetwork::SinkPacket*) buf;
-				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(*msg));
 				free(buf);
+				free(msg->data);
 				LOG("Buffer converted");
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
-				graphics_mgr->drawWithMaps(config->getPanelMaps());
 			}
 	}
 
 
 	// Animation finished. Shut down the RGB matrix.
-	canvas->Clear();
-	delete canvas;
 	return 0;
 }
 

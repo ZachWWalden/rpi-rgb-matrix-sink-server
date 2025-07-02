@@ -2,11 +2,11 @@ CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter
 CXXFLAGS=$(CFLAGS) -std=c++11
 OBJDIR = .build
 #SRCS != find . -name "*.cpp"
-SRCS=./Graphics/Graphics.cpp main.cpp ./Graphics/fonts/font-4x6.cpp ./Graphics/fonts/font-5x8.cpp ./Graphics/fonts/font-7x9.cpp ./Graphics/fonts/font-9x16.cpp ./Network/Network.cpp ./Config/Config.cpp
-SUBDIRS=./Graphics ./Graphics/fonts/ ./Network/ ./Config/
+SRCS=main.cpp ./Network/Network.cpp
+SUBDIRS=./Network/
 OBJDIRS=$(SUBDIRS:%=$(OBJDIR)/%)
 OBJECTS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
-TARGET=rpi-matrixd
+TARGET=local-speed-test
 
 DEPDIR = .dep
 DEPDIRS=$(SUBDIRS:%=$(DEPDIR)/%)
@@ -20,7 +20,7 @@ RGB_INCDIR=$(RGB_LIB_DISTRIBUTION)/include
 RGB_LIBDIR=$(RGB_LIB_DISTRIBUTION)/lib
 RGB_LIBRARY_NAME=rgbmatrix
 RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
-LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread -ljsoncpp
+LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
 all : $(TARGET)
 
