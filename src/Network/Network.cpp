@@ -233,10 +233,10 @@ SinkPacket Network::readPacket()
 	{
 		//allocate on the heap for payload.
 		int num_bytes = (int)pckt.bytes_per_pixel * (v_res_full * h_res_full);
-		LOG_INT(num_bytes);
-		LOG("Start malloc in network obj");
+		// LOG_INT(num_bytes);
+		// LOG("Start malloc in network obj");
 		uint8_t *data = (uint8_t*) calloc(num_bytes, 1);
-		LOG("End malloc in network obj");
+		// LOG("End malloc in network obj");
 		valread = this->recv_all(client_fd, data, num_bytes);
 		if(valread == -1)
 		{
@@ -245,7 +245,6 @@ SinkPacket Network::readPacket()
 		}
 		packet.data = data;
 	}
-	//return packet.
 	return packet;
 }
 

@@ -146,10 +146,13 @@ void* networkThread(void* arg)
 	mqd_t mq_wronly;
 	mq_wronly = mq_open(MSG_QUEUE_NAME, O_WRONLY);
 	int mq_ret = -1;
+	int conn_rcvd = 0;
 	while(!interrupt_received)
 	{
 		//wait for a connection
 		interface->waitForConnection();
+		conn_rcvd++;
+		LOG_INT(conn_rcvd);
 		connection_valid = true;
 		bool msg_sent = false;
 		while(!interrupt_received && connection_valid)
@@ -190,11 +193,13 @@ void* networkThread(void* arg)
 				else
 					msg_sent = true;
 			}
-			if(!msg_sent)
+			if(!msg_sent && packet.data != nullptr)
 			{
 				//free any allocated memory that did not recv an ownership transfer to render thread.
 				delete packet.data;
 			}
+			//reset this flag for next connection.
+			msg_sent = false;
 		}
 		interface->closeClientConnection();
 	}
