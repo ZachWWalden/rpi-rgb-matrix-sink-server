@@ -106,9 +106,9 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 		LOG("render_target is null");
 		return;
 	}
-	LOG("drawWithMaps not null");
+	// LOG("drawWithMaps not null");
 
-	LOG_INT(panels->size());
+	// LOG_INT(panels->size());
 	std::vector<ZwConfig::PanelMap*>::iterator itr = panels->begin();
 	for(; itr < panels->end(); itr++)
 	{
@@ -744,15 +744,15 @@ uint8_t*** Graphics::rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet)
 
 uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)
 {
-	LOG("rgb555torgb888");
+	// LOG("rgb555torgb888");
 	if(frame_packet.data == nullptr)
 		return nullptr;
-	LOG("rgb555torgb888 not null");
+	// LOG("rgb555torgb888 not null");
 	uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res + 1, frame_packet.header.h_res + 1, 3, 0x00);
 	uint16_t* buffer = (uint16_t*)frame_packet.data;
 	int num_pixels = (frame_packet.header.h_res + 1) * (frame_packet.header.v_res + 1);
-	LOG("Num Pixels:");
-	LOG_INT(num_pixels);
+	// LOG("Num Pixels:");
+	// LOG_INT(num_pixels);
 	int flat_idx = 0;
 
 	for(int y = 0; y < frame_packet.header.v_res + 1; y++)
