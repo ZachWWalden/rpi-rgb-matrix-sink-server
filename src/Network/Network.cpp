@@ -218,30 +218,18 @@ SinkPacket Network::readPacket()
 		LOG("Read frame packet from client failed");
 		exit(EXIT_FAILURE);
 	}
-	LOG("");
-	LOG("");
-	LOG_POINT(pckt.h_res, pckt.v_res);
-	LOG_INT(pckt.bytes_per_pixel);
-	LOG("");
-	LOG("");
 	//ensure the data payload is reasonably sized.
 	int h_res_full = pckt.h_res + 1, v_res_full = pckt.v_res + 1;
 	if((pckt.bytes_per_pixel * ((h_res_full) * (v_res_full))) > (MAX_BYTES_PER_PIXEL * MAX_H_RES * MAX_V_RES))
 	{
 		//client is trying to send over 1 MiB of data we define anything more as a malicious.
 		LOG("Packet too big");
-		LOG("");
-		LOG("");
-		LOG_POINT(pckt.h_res, pckt.v_res);
-		LOG_INT(pckt.bytes_per_pixel);
-		LOG("");
-		LOG("");
 		valid_data = false;
 	}
 	SinkPacket packet;
 	packet.header = pckt;
 	packet.data = nullptr;
-	if(valid_data)
+	if(valid_data && pckt.bytes_per_pixel != 0)
 	{
 		//allocate on the heap for payload.
 		int num_bytes = (int)pckt.bytes_per_pixel * (v_res_full * h_res_full);
