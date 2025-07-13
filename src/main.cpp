@@ -125,6 +125,12 @@ int main(int argc, char *argv[]) {
 			}
 	}
 
+	//close the msg queue
+	mq_ret = mq_close(mq_create);
+	if(mq_ret == -1)
+	{
+		LOG("Render thread mq failed to close.");
+	}
 
 	// Animation finished. Shut down the RGB matrix.
 	canvas->Clear();
