@@ -32,7 +32,6 @@
 #include "Network.hpp"
 
 #include "../Logging/Logging.hpp"
-#include <asm-generic/socket.h>
 #include <cerrno>
 #include <cstdint>
 #include <cstdlib>
@@ -106,6 +105,7 @@ Network::Network(uint16_t port)
 
 Network::~Network()
 {
+	//close the server_fd
 }
 
 bool Network::waitForConnection()
@@ -268,9 +268,16 @@ bool Network::writePacket(uint8_t num_bytes, uint8_t* data)
 }
 
 
-int Network::closeConnection()
+int Network::closeClientConnection()
 {
 	int ret_val  = close(this->client_fd);
+
+	return ret_val;
+}
+
+int Network::closeServerConnection()
+{
+	int ret_val  = close(this->server_fd);
 
 	return ret_val;
 }

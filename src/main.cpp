@@ -196,8 +196,9 @@ void* networkThread(void* arg)
 				delete packet.data;
 			}
 		}
-		interface->closeConnection();
+		interface->closeClientConnection();
 	}
+	interface->closeServerConnection();
 	//Close the msq queue.
 	mq_ret = mq_close(mq_wronly);
 	if(mq_ret != 0)

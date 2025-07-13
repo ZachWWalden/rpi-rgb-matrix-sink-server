@@ -1,5 +1,4 @@
-/*==================================================================================
- *Class - Network
+/*================================================================================== *Class - Network
  *Author - Zach Walden
  *Created - 4/17/2024
  *Last Changed - 6/7/2025
@@ -104,7 +103,8 @@ public:
 	SinkPacket readPacket();
 	bool writePacket(uint8_t num_bytes, uint8_t* data);
 
-	int closeConnection();
+	int closeClientConnection();
+	int closeServerConnection();
 
 private:
 	int send_all(int sock_fd, const void *buf, size_t size, int flags);
