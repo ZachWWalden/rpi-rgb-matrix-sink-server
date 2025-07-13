@@ -95,7 +95,7 @@ void Graphics::draw()
 
 void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 {
-	LOG("drawWithMaps");
+	// LOG("drawWithMaps");
 	if(this->canvas == nullptr)
 	{
 		LOG("Graphics Instance does not have a Canvas to draw to");
