@@ -202,6 +202,7 @@ void* networkThread(void* arg)
 			msg_sent = false;
 		}
 		interface->closeClientConnection();
+		//Send a blank frame to across
 	}
 	interface->closeServerConnection();
 	//Close the msq queue.

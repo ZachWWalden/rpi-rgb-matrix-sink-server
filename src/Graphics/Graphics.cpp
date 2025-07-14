@@ -44,11 +44,14 @@ namespace ZwGraphics
 	const Color Graphics::TRANSPARENT(0,0,0,0);
 
 
-	const uint8_t Graphics::five_bit_to_eight_bit[] = {0,   2,   8,   16,  24,  30,  38,  50,
-													   62,  72,  80,  88,  96,  104, 112, 120,
-													   128, 136, 144, 152, 160, 168, 176, 184,
-													   192, 208, 216, 224, 232, 240, 248, 255};
-
+	// const uint8_t Graphics::five_bit_to_eight_bit[] = {0,   2,   8,   16,  24,  30,  38,  50,
+	// 												   62,  72,  80,  88,  96,  104, 112, 120,
+	// 												   128, 136, 144, 152, 160, 168, 176, 184,
+	// 												   192, 208, 216, 224, 232, 240, 248, 255};
+	const uint8_t Graphics::five_bit_to_eight_bit[] = {
+     0,   0,   0,   0,   0,   1,   1,   2,   3,   5,   7,   9,  12,  15,  18,  23,
+    27,  33,  39,  46,  54,  62,  71,  82,  93, 105, 118, 132, 147, 164, 181, 200,
+  };
 Graphics::Graphics(Canvas* canvas, uint8_t height, uint8_t width)
 {
 		this->canvas = canvas;
