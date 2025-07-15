@@ -61,7 +61,8 @@ bool Config::readConfigFile()
 	//TODO add in config sanitizing
 	bool valid_config = true;
 	//debug config path
-	std::string config_path = "config/testconfig.json";
+	// std::string config_path = "config/testconfig.json";
+	std::string config_path = "config/config.json";
 	//get config path
 #ifndef DEBUG
 	//use $XDG_CONFIG_HOME
