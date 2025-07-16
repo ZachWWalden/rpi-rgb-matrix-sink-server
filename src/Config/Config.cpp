@@ -62,7 +62,7 @@ bool Config::readConfigFile()
 	bool valid_config = true;
 	//debug config path
 	// std::string config_path = "config/testconfig.json";
-	std::string config_path = "config/config.json";
+	std::string config_path = "config/testconfig.json";
 	//get config path
 #ifndef DEBUG
 	//use $XDG_CONFIG_HOME
