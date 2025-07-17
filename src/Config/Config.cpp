@@ -56,6 +56,22 @@ Config::~Config()
 	}
 }
 
+void Config::disp()
+{
+	LOGV("Port: ", this->port);
+	LOGV("hres: ", this->hres);
+	LOGV("vres: ", this->vres);
+	LOGV("panel hres: ", this->panel_hres);
+	LOGV("panel vres: ", this->panel_vres);
+	LOGV("num chains: ", this->num_chains);
+	LOGV("chain len: ", this->chain_length);
+
+	for(PanelMap* panel_map: this->panels)
+	{
+		panel_map->disp();
+	}
+}
+
 bool Config::readConfigFile()
 {
 	//TODO add in config sanitizing

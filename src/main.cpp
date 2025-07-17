@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
 	if(!config->is_valid)
 		return EXIT_FAILURE;
 
+	config->disp();
+
 	RGBMatrix::Options defaults;
 	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
 	defaults.rows = config->panel_vres;

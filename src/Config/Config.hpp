@@ -106,6 +106,7 @@ public:
 
 	std::vector<PanelMap*>* getPanelMaps();
 	const char* getHardwareMapping();
+	void disp();
 
 private:
 	bool readConfigFile();
