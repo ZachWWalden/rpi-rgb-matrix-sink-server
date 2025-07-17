@@ -137,6 +137,19 @@ int main(int argc, char *argv[]) {
 	{
 		LOG("Render thread mq failed to close.");
 	}
+	//unlink the msg queue
+	int unlink_status = mq_unlink(MSG_QUEUE_NAME);
+	if(unlink_status != 0)
+	{
+		//unlink failed
+		LOG("Mqueue unlink failed");
+		if(errno == EACCES)
+			LOG("EACCES");
+		else if (errno == ENAMETOOLONG)
+			LOG("ENAMETOOLONG");
+		else if (errno == ENOENT)
+			LOG("ENOENT");
+	}
 
 	// Animation finished. Shut down the RGB matrix.
 	canvas->Clear();
