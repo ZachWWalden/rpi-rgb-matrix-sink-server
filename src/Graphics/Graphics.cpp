@@ -165,7 +165,7 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 		LOG("Graphics Instance does not have a Canvas to draw to");
 		return;
 	}
-	if(this->render_target == nullptr)
+	if(pckt.data == nullptr)
 	{
 		LOG("render_target is null");
 		return;
