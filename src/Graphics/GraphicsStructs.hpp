@@ -36,7 +36,9 @@
 
 #include "../Logging/Logging.hpp"
 
-namespace ZwGraphics{
+namespace ZwGraphics
+{
+
 struct Color
 {
 	uint8_t alpha;
@@ -119,6 +121,7 @@ struct Rectangle
 		p_top_left.disp();
 		LOG("p_bot_right");
 		p_bot_right.disp();
+	}
 };
 
 struct Triangle
@@ -197,4 +200,5 @@ enum Fonts
 	}
 };
 }
+
 #endif
