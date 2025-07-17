@@ -121,6 +121,7 @@ int main(int argc, char *argv[]) {
 				}
 				LOG("Render: MSG Received");
 				ZwNetwork::SinkPacket *msg = (ZwNetwork::SinkPacket*) buf;
+				LOG("Render: Calling frame render");
 				graphics_mgr->drawWithMapsFlat555(config->getPanelMaps(), *msg);
 				LOG("Render: frame rendered");
 				// graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(*msg));
