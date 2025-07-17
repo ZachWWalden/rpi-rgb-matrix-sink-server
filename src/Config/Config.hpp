@@ -37,7 +37,6 @@
 #include <vector>
 
 #include "../Graphics/GraphicsStructs.hpp"
-#include "../Logging/Logging.hpp"
 
 namespace ZwConfig
 {
@@ -58,12 +57,12 @@ struct RotationConstants
 	}
 	void disp()
 	{
-		LOG("Offset");
+		// LOG("Offset");
 		offset.disp();
-		LOG("Increment");
+		// LOG("Increment");
 		increment.disp();
-		LOG("Row Major");
-		LOG(row_major);
+		// LOG("Row Major");
+		// LOG(row_major);
 	}
 };
 
@@ -79,11 +78,11 @@ struct PanelMap
 	}
 	void disp()
 	{
-		LOG("Source");
+		// LOG("Source");
 		source.disp();
-		LOG("Dest");
+		// LOG("Dest");
 		destination.disp();
-		LOG("Rot constants");
+		// LOG("Rot constants");
 		rot_constants.disp();
 	}
 };
