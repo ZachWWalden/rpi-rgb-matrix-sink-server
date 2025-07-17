@@ -30,7 +30,9 @@
 #include "Utils/triplepointer.hpp"
 #include "Config/Config.hpp"
 #include "Network/Network.hpp"
+
 using rgb_matrix::RGBMatrix;
+using rgb_matrix::RuntimeOptions;
 using rgb_matrix::Canvas;
 
 #define MSG_QUEUE_NAME "/rpimatrixsinkserver"
@@ -55,16 +57,20 @@ int main(int argc, char *argv[]) {
 	}
 
 	RGBMatrix::Options defaults;
+	RuntimeOptions rt_defaults;
 	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
 	defaults.rows = config->panel_vres;
 	defaults.cols = config->panel_hres;
 	defaults.chain_length = config->chain_length;
 	defaults.parallel = config->num_chains;
+	defaults.pwm_bits = config->led_pwm_bits;
+	defaults.pwm_lsb_nanoseconds = config->led_pwm_lsb_nanoseconds;
+	rt_defaults.gpio_slowdown = config->led_slowdown_gpio;
 	//This sets the default brightness.
 	defaults.brightness = 100;
 	defaults.scan_mode = 0;
 	defaults.show_refresh_rate = true;
-	Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
+	Canvas *canvas = RGBMatrix::CreateFromOptions(defaults, rt_defaults);
 	if (canvas == NULL)
 		return 1;
 

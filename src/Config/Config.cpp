@@ -115,6 +115,12 @@ bool Config::readConfigFile()
 	this->num_chains = root["num_chains"].asInt();
 	//get chain length
 	this->chain_length = root["chain_length"].asInt();
+	//get number of bits for pwm
+	this->led_pwm_bits = root["led_pwm_bits"].asInt();
+	//get the gpio slowdown value
+	this->led_slowdown_gpio = root["led_slowdown_gpio"].asInt();
+	//get lsb pwm nanoseconds
+	this->led_pwm_lsb_nanoseconds = root["led_pwm_lsb_nanoseconds"].asInt();
 
 	Json::Value panel_maps = root["panel_maps"];
 	//loop over panels

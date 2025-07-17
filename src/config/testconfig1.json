@@ -7,6 +7,9 @@
 	"panel_vres" : 64,
 	"num_chains" : 1,
 	"chain_length" : 1,
+	"led_pwm_bits" : 8,
+	"led_slowdown_gpio" : 3,
+	"led_pwm_lsb_nanoseconds" : 100,
 	"panel_maps" : [
 		{
 			"rot" : 0,
