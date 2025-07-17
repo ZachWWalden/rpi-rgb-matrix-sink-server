@@ -27,7 +27,7 @@
 
 #if DEBUG
 #define LOG(x) std::cout << x << std::endl
-#define LOG_INT(x) std::cout << std::endl << std::hex << (int)x << std::endl
+#define LOG_INT(x) std::cout << std::hex << (int)x << std::endl
 #define LOG_POINT(x, y) std::cout << std::hex << "X = " << (int)x << ", Y = " << (int)y << std::endl
 #define LOG_COLOR(r,g,b) std::cout << std::hex << "Red = " << (int)r << ", Green = " << (int)g << ", Blue = " << (int)b << std::endl
 #define LOGV(x,y) std::cout << x << y << std::endl
