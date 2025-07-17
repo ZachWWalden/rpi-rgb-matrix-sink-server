@@ -114,18 +114,18 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 	// LOG_INT(panels->size());
 	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
-		panel_map->disp();
+		// panel_map->disp();
 		int x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		int y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 
-		LOG_COLOR(this->render_target[y][x][0],
-				  this->render_target[y][x][1],
-				  this->render_target[y][x][2]);
+		// LOG_COLOR(this->render_target[y][x][0],
+		// 		  this->render_target[y][x][1],
+		// 		  this->render_target[y][x][2]);
 		//Loop can switch between column and row major.
-		for(int rows = panel_map->destination.p_top_left.x; rows <= panel_map->destination.p_bot_right.x; rows++)
+		for(int cols = panel_map->destination.p_top_left.x; cols <= panel_map->destination.p_bot_right.x; cols++)
 		{
-			LOG_INT(rows);
-			for(int cols = panel_map->destination.p_top_left.y ;cols <= panel_map->destination.p_bot_right.y; cols++)
+			// LOG_INT(rows);
+			for(int rows = panel_map->destination.p_top_left.y ;rows <= panel_map->destination.p_bot_right.y; rows++)
 			{
 				// LOG_COLOR(this->render_target[y][x][0],
 				// 		  this->render_target[y][x][1],
