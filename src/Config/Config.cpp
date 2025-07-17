@@ -171,9 +171,9 @@ RotationConstants Config::getRotConstants(int rot)
 		row_major = true;
 	}
 	//(0,0) -> (h_res - 1, 0)
-	else if (rot == -90 || rot == 270) {
+	else if (rot == 90 || rot == -270) {
 		h_offset = this->panel_hres - 1; v_offset = 0; h_increment = -1; v_increment = 1;
-		row_major = false;
+		row_major = true;
 	}
 	//(0,0) -> (h_res - 1, v_res - 1)
 	else if (rot == 180 || rot == -180) {
@@ -181,9 +181,9 @@ RotationConstants Config::getRotConstants(int rot)
 		row_major = true;
 	}
 	//(0,0) -> (0, v_res - 1)
-	else if (rot == -270 || rot == 90) {
+	else if (rot == 270 || rot == -90) {
 		h_offset = 0; v_offset = this->panel_vres - 1; h_increment = 1; v_increment = -1;
-		row_major = false;
+		row_major = true;
 	}
 	else
 	{
