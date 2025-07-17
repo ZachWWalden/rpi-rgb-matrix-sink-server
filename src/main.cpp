@@ -57,8 +57,10 @@ int main(int argc, char *argv[]) {
 	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
 	defaults.rows = config->panel_vres;
 	defaults.cols = config->panel_hres;
-	defaults.chain_length = config->chain_length;
-	defaults.parallel = config->num_chains;
+	defaults.chain_length = 4;
+	// defaults.chain_length = config->chain_length;
+	// defaults.parallel = config->num_chains;
+	defaults.parallel = 1;
 	//This sets the default brightness.
 	defaults.brightness = 100;
 	defaults.scan_mode = 0;
