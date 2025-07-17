@@ -67,16 +67,6 @@ int main(int argc, char *argv[]) {
 	if (canvas == NULL)
 		return 1;
 
-    for(int rows = 0; rows < config->panel_vres; rows++)
-    {
-        for(int cols = 0; cols < config->chain_length * config->panel_hres; cols++)
-        {
-            canvas->SetPixel(cols, rows, 0xFF, 0xFF, 0xFF);
-            usleep(1000*1);
-        }
-    }
-	usleep(1000*1000*5);
-
 	//create message queue and and open read only
 	mqd_t mq_create;
 	int mq_ret;
