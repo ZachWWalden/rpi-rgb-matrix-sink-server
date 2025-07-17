@@ -104,25 +104,26 @@ int main(int argc, char *argv[]) {
 	long unsigned int tid;
 	pthread_create(&tid, NULL, networkThread, &(config->port));
 
+	char buf[attr.mq_msgsize];
+
 	while(!interrupt_received)
 	{
 			if(connection_valid)
 			{
-				// LOG("Valid Connection");
+				LOG("Render: Valid Connection");
 				//Wait for a frame
 				//recv msg
-				char *buf = (char *) calloc(attr.mq_msgsize, 1);
-				mq_ret = mq_receive(mq_create, buf, attr.mq_msgsize, NULL);
+				mq_ret = mq_receive(mq_create,(char*)buf, attr.mq_msgsize, NULL);
 				if(mq_ret == -1)
 				{
-					// LOG("Message receive failed");
+					LOG("Render: Message receive failed");
 					exit(EXIT_FAILURE);
 				}
-				// LOG("MSG Received");
+				LOG("Render: MSG Received");
 				ZwNetwork::SinkPacket *msg = (ZwNetwork::SinkPacket*) buf;
 				graphics_mgr->drawWithMapsFlat555(config->getPanelMaps(), *msg);
+				LOG("Render: frame rendered");
 				// graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(*msg));
-				free(buf);
 				// LOG("Buffer converted");
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
 				// graphics_mgr->drawWithMaps(config->getPanelMaps());
@@ -155,6 +156,7 @@ void* networkThread(void* arg)
 	{
 		//wait for a connection
 		interface->waitForConnection();
+		LOG("Network: connection found");
 		conn_rcvd++;
 		LOG_INT(conn_rcvd);
 		connection_valid = true;
@@ -164,7 +166,9 @@ void* networkThread(void* arg)
 			//Handle a single connection.
 			//wait for frame
 			//call to interface->read() transfers ownership of all dynmically allocated memory accessible using pointers within the ZwNetwork::SinkPacket it returns.
+			LOG("Network: Wait for packet");
 			ZwNetwork::SinkPacket packet = interface->readPacket();
+			LOG("Network: Packet received");
 			//Check if termination packet has been sent.
 			if(packet.header.color_mode == 0xFF || packet.data == nullptr)
 			{
@@ -174,10 +178,11 @@ void* networkThread(void* arg)
 			//send message.
 			if(connection_valid)
 			{
+				LOG("Network: Con valid/ msg send");
 				mq_ret = mq_send(mq_wronly,(const char *)&packet,sizeof(ZwNetwork::SinkPacket),0);
 				if(mq_ret != 0)
 				{
-					LOG("Message did not send");
+					LOG("Network: Message did not send");
 					if(errno == EAGAIN)
 						LOG("EAGAIN");
 					else if(errno == EBADF)
@@ -195,16 +200,21 @@ void* networkThread(void* arg)
 					msg_sent = false;
 				}
 				else
+				{
+					LOG("Network: Msg sent");
 					msg_sent = true;
+				}
 			}
 			if(!msg_sent && packet.data != nullptr)
 			{
 				//free any allocated memory that did not recv an ownership transfer to render thread.
+				LOG("Network: delete unused frame data");
 				delete packet.data;
 			}
 			//reset this flag for next connection.
 			msg_sent = false;
 		}
+		LOG("Network: Close client connection");
 		interface->closeClientConnection();
 		//Send a blank frame to across
 	}
