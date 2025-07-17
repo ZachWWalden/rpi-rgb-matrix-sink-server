@@ -192,9 +192,9 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 				// 		  this->render_target[y][x][1],
 				// 		  this->render_target[y][x][2]);
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->five_bit_to_eight_bit[(flt_buf[(y*192+x)] & 0x1f)],
-																this->five_bit_to_eight_bit[((flt_buf[(y*192+x)] >> 5) & 0x1f)],
-																this->five_bit_to_eight_bit[((flt_buf[(y*192+x)] >> 10) & 0x1f)])
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->five_bit_to_eight_bit[(flt_buf[(y*256+x)] & 0x1f)],
+																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 5) & 0x1f)],
+																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 10) & 0x1f)])
 													   );
 				if(panel_map->rot_constants.row_major)
 					x += panel_map->rot_constants.increment.x;
