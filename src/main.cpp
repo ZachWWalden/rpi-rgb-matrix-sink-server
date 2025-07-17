@@ -49,9 +49,10 @@ int main(int argc, char *argv[]) {
 	ZwConfig::Config* config = new ZwConfig::Config();
 
 	if(!config->is_valid)
+	{
+		LOG("Invalid Config");
 		return EXIT_FAILURE;
-
-	config->disp();
+	}
 
 	RGBMatrix::Options defaults;
 	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
