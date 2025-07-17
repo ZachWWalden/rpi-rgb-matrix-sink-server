@@ -157,6 +157,66 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 	//as soon as we are done copying to the Canvas object, free the triple pointer.
 	this->freeRenderTarget();
 }
+void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwNetwork::SinkPacket pckt)
+{
+	// LOG("drawWithMaps");
+	if(this->canvas == nullptr)
+	{
+		LOG("Graphics Instance does not have a Canvas to draw to");
+		return;
+	}
+	if(this->render_target == nullptr)
+	{
+		LOG("render_target is null");
+		return;
+	}
+	// LOG("drawWithMaps not null");
+	uint16_t *flt_buf = (uint16_t*)pckt.data;
+	// LOG_INT(panels->size());
+	for(ZwConfig::PanelMap* panel_map: *panels)
+	{
+		// panel_map->disp();
+		int x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
+		int y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
+
+		// LOG_COLOR(this->render_target[y][x][0],
+		// 		  this->render_target[y][x][1],
+		// 		  this->render_target[y][x][2]);
+		//Loop can switch between column and row major.
+		for(int cols = panel_map->destination.p_top_left.x; cols <= panel_map->destination.p_bot_right.x; cols++)
+		{
+			// LOG_INT(rows);
+			for(int rows = panel_map->destination.p_top_left.y ;rows <= panel_map->destination.p_bot_right.y; rows++)
+			{
+				// LOG_COLOR(this->render_target[y][x][0],
+				// 		  this->render_target[y][x][1],
+				// 		  this->render_target[y][x][2]);
+				//Write pixel to canvas
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->five_bit_to_eight_bit[(flt_buf[(y*192+x)] & 0x1f)],
+																this->five_bit_to_eight_bit[((flt_buf[(y*192+x)] >> 5) & 0x1f)],
+																this->five_bit_to_eight_bit[((flt_buf[(y*192+x)] >> 10) & 0x1f)])
+													   );
+				if(panel_map->rot_constants.row_major)
+					x += panel_map->rot_constants.increment.x;
+				else
+					y += panel_map->rot_constants.increment.y;
+			}
+			if(panel_map->rot_constants.row_major)
+			{
+				y += panel_map->rot_constants.increment.y;
+				//reset the other
+				x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
+			}
+			else
+			{
+				x += panel_map->rot_constants.increment.x;
+				//reset the other
+				y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
+			}
+		}
+	}
+	free(pckt.data);
+}
 
 void Graphics::PlotPoint(uint8_t x, uint8_t y, Color color)
 {

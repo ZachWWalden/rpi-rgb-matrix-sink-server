@@ -43,6 +43,7 @@ class Graphics
 
 		void draw();
 		void drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels);
+		void drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwNetwork::SinkPacket pckt);
 
 		void PlotPoint(uint8_t x, uint8_t y, Color color);
 

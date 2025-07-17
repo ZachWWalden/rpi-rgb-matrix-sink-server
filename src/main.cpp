@@ -120,11 +120,12 @@ int main(int argc, char *argv[]) {
 				}
 				// LOG("MSG Received");
 				ZwNetwork::SinkPacket *msg = (ZwNetwork::SinkPacket*) buf;
-				graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(*msg));
+				graphics_mgr->drawWithMapsFlat555(config->getPanelMaps(), *msg);
+				// graphics_mgr->setRenderTarget(graphics_mgr->convertFlatBufferToTriplePointer(*msg));
 				free(buf);
 				// LOG("Buffer converted");
 				//When a frame is received, map each of it's regions to a panel in the chain. And draw to canvas
-				graphics_mgr->drawWithMaps(config->getPanelMaps());
+				// graphics_mgr->drawWithMaps(config->getPanelMaps());
 			}
 	}
 
