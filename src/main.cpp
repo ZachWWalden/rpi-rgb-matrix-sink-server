@@ -57,10 +57,8 @@ int main(int argc, char *argv[]) {
 	defaults.hardware_mapping = config->getHardwareMapping();  // or e.g. "adafruit-hat"
 	defaults.rows = config->panel_vres;
 	defaults.cols = config->panel_hres;
-	defaults.chain_length = 4;
-	// defaults.chain_length = config->chain_length;
-	// defaults.parallel = config->num_chains;
-	defaults.parallel = 1;
+	defaults.chain_length = config->chain_length;
+	defaults.parallel = config->num_chains;
 	//This sets the default brightness.
 	defaults.brightness = 100;
 	defaults.scan_mode = 0;
@@ -68,6 +66,16 @@ int main(int argc, char *argv[]) {
 	Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
 	if (canvas == NULL)
 		return 1;
+
+    for(int rows = 0; rows < V_RES; rows++)
+    {
+        for(int cols = 0; cols < 4*H_RES; cols++)
+        {
+            canvas->SetPixel(cols, rows, 0xFF, 0xFF, 0xFF);
+            usleep(1000*1);
+        }
+    }
+	usleep(1000*1000*5);
 
 	//create message queue and and open read only
 	mqd_t mq_create;
