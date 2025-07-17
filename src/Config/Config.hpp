@@ -92,8 +92,8 @@ class Config
 	//Attributes
 public:
 	uint16_t hres, vres, panel_hres, panel_vres, port;
-	uint8_t num_chains;
-	uint8_t chain_length;
+	uint16_t num_chains;
+	uint16_t chain_length;
 	bool is_valid = false;
 
 private:
