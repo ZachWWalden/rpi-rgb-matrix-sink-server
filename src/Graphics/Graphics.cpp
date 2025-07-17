@@ -115,6 +115,7 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 	std::vector<ZwConfig::PanelMap*>::iterator itr = panels->begin();
 	for(; itr < panels->end(); itr++)
 	{
+		(*itr)->disp();
 		int x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;
 		int y = (*itr)->source.p_top_left.y + (*itr)->rot_constants.offset.y;
 		//Loop can switch between column and row major.

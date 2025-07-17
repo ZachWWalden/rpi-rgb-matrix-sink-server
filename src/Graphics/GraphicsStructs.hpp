@@ -34,6 +34,8 @@
 
 #include <cstdint>
 
+#include "../Logging/Logging.hpp"
+
 namespace ZwGraphics{
 struct Color
 {
@@ -73,6 +75,10 @@ struct Point
 		x = new_x;
 		y = new_y;
 	}
+	void disp()
+	{
+		LOG_POINT(x, y);
+	}
 };
 
 struct Vec2I
@@ -87,6 +93,10 @@ struct Vec2I
 	{
 		x = new_x;
 		y = new_y;
+	}
+	void disp()
+	{
+		LOG_POINT(x, y);
 	}
 };
 
@@ -103,6 +113,12 @@ struct Rectangle
 		p_top_left = new_p1;
 		p_bot_right = new_p2;
 	}
+	void disp()
+	{
+		LOG("p_top_left");
+		p_top_left.disp();
+		LOG("p_bot_right");
+		p_bot_right.disp();
 };
 
 struct Triangle
