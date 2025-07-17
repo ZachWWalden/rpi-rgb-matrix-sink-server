@@ -112,15 +112,14 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 	// LOG("drawWithMaps not null");
 
 	// LOG_INT(panels->size());
-	std::vector<ZwConfig::PanelMap*>::iterator itr = panels->begin();
-	for(; itr < panels->end(); itr++)
+	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
-		int x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;
-		int y = (*itr)->source.p_top_left.y + (*itr)->rot_constants.offset.y;
+		int x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
+		int y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 		//Loop can switch between column and row major.
-		for(int rows = (*itr)->destination.p_top_left.x; rows <= (*itr)->destination.p_bot_right.x; rows++)
+		for(int rows = panel_map->destination.p_top_left.x; rows <= panel_map->destination.p_bot_right.x; rows++)
 		{
-			for(int cols = (*itr)->destination.p_top_left.y ;cols <= (*itr)->destination.p_bot_right.y; cols++)
+			for(int cols = panel_map->destination.p_top_left.y ;cols <= panel_map->destination.p_bot_right.y; cols++)
 			{
 				// LOG_COLOR(this->render_target[y][x][0],
 				// 		  this->render_target[y][x][1],
@@ -130,22 +129,22 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 																this->render_target[y][x][1],
 																this->render_target[y][x][2])
 													   );
-				if((*itr)->rot_constants.row_major)
-					x += (*itr)->rot_constants.increment.x;
+				if(panel_map->rot_constants.row_major)
+					x += panel_map->rot_constants.increment.x;
 				else
-					y += (*itr)->rot_constants.increment.y;
+					y += panel_map->rot_constants.increment.y;
 			}
-			if((*itr)->rot_constants.row_major)
+			if(panel_map->rot_constants.row_major)
 			{
-				y += (*itr)->rot_constants.increment.y;
+				y += panel_map->rot_constants.increment.y;
 				//reset the other
-				x = (*itr)->source.p_top_left.x + (*itr)->rot_constants.offset.x;
+				x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 			}
 			else
 			{
-				x += (*itr)->rot_constants.increment.x;
+				x += panel_map->rot_constants.increment.x;
 				//reset the other
-				y = (*itr)->source.p_top_left.y + (*itr)->rot_constants.offset.y;
+				y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 			}
 		}
 	}
