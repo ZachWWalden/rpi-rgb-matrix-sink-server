@@ -114,6 +114,7 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 	// LOG_INT(panels->size());
 	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
+		panel_map->disp();
 		int x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		int y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 		//Loop can switch between column and row major.
@@ -124,6 +125,7 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 				// LOG_COLOR(this->render_target[y][x][0],
 				// 		  this->render_target[y][x][1],
 				// 		  this->render_target[y][x][2]);
+				LOG_POINT(cols, rows);
 				//Write pixel to canvas
 				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->render_target[y][x][0],
 																this->render_target[y][x][1],
