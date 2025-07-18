@@ -135,23 +135,11 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 																this->render_target[y][x][1],
 																this->render_target[y][x][2])
 													   );
-				if(panel_map->rot_constants.row_major)
-					x += panel_map->rot_constants.increment.x;
-				else
-					y += panel_map->rot_constants.increment.y;
-			}
-			if(panel_map->rot_constants.row_major)
-			{
-				y += panel_map->rot_constants.increment.y;
-				//reset the other
-				x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
-			}
-			else
-			{
 				x += panel_map->rot_constants.increment.x;
-				//reset the other
-				y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 			}
+			y += panel_map->rot_constants.increment.y;
+			//reset the other
+			x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		}
 	}
 	//as soon as we are done copying to the Canvas object, free the triple pointer.
@@ -187,23 +175,11 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 5) & 0x1f)],
 																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 10) & 0x1f)])
 													   );
-				if(panel_map->rot_constants.row_major)
-					x += panel_map->rot_constants.increment.x;
-				else
-					y += panel_map->rot_constants.increment.y;
-			}
-			if(panel_map->rot_constants.row_major)
-			{
-				y += panel_map->rot_constants.increment.y;
-				//reset the other
-				x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
-			}
-			else
-			{
 				x += panel_map->rot_constants.increment.x;
-				//reset the other
-				y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
 			}
+			y += panel_map->rot_constants.increment.y;
+			//reset the other
+			x = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		}
 	}
 	free(pckt.data);
