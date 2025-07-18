@@ -90,7 +90,7 @@
 				"y2" : 191
 			},
 			"rgb_adjust" : {
-				"red" : 0,
+				"red" : -6,
 				"green" : 0,
 				"blue" : 0
 			}
@@ -111,9 +111,9 @@
 				"y2" : 127
 			},
 			"rgb_adjust" : {
-				"red" : -3,
-				"green" : 0,
-				"blue" : 3
+				"red" : -6,
+				"green" : -3,
+				"blue" : 6
 			}
 		},
 		{
@@ -132,9 +132,9 @@
 				"y2" : 127
 			},
 			"rgb_adjust" : {
-				"red" : -3,
-				"green" : 0,
-				"blue" : 3
+				"red" : -6,
+				"green" : -3,
+				"blue" : 6
 			}
 		},
 		{
@@ -174,7 +174,7 @@
 				"y2" : 127
 			},
 			"rgb_adjust" : {
-				"red" : 0,
+				"red" : -6,
 				"green" : 0,
 				"blue" : 0
 			}
@@ -195,9 +195,9 @@
 				"y2" : 63
 			},
 			"rgb_adjust" : {
-				"red" : -3,
-				"green" : 0,
-				"blue" : 3
+				"red" : -6,
+				"green" : -3,
+				"blue" : 5
 			}
 		},
 		{
@@ -216,9 +216,9 @@
 				"y2" : 63
 			},
 			"rgb_adjust" : {
-				"red" : -3,
-				"green" : 0,
-				"blue" : 3
+				"red" : -6,
+				"green" : -3,
+				"blue" : 6
 			}
 		},
 		{
@@ -237,9 +237,9 @@
 				"y2" : 63
 			},
 			"rgb_adjust" : {
-				"red" : -3,
-				"green" : 0,
-				"blue" : 3
+				"red" : -6,
+				"green" : -3,
+				"blue" : 6
 			}
 		},
 		{
