@@ -158,6 +158,7 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 		return;
 	}
 	uint16_t *flt_buf = (uint16_t*)pckt.data;
+	auto color_conv = this->five_bit_to_eight_bit;
 	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
 		// panel_map->disp();
@@ -168,6 +169,8 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 		int x_inc = panel_map->rot_constants.increment.x;
 		int y_inc = panel_map->rot_constants.increment.y;
 
+		int16_t red_adj = panel_map->rgb_adj.red, green_adj = panel_map->rgb_adj.green, blue_adj = panel_map->rgb_adj.blue;
+
 		int col_top_left_x = panel_map->destination.p_top_left.x, col_bot_right_x = panel_map->destination.p_bot_right.x;
 		int row_top_left_y = panel_map->destination.p_top_left.y, row_bot_right_y = panel_map->destination.p_bot_right.y;
 		//Loop can switch between column and row major.
@@ -177,9 +180,9 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 			for(int rows = row_top_left_y ;rows <= row_bot_right_y; rows++)
 			{
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->sat_add(this->five_bit_to_eight_bit[(flt_buf[(y*256+x)] & 0x1f)], panel_map->rgb_adj.red),
-																this->sat_add(this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 5) & 0x1f)], panel_map->rgb_adj.green),
-																this->sat_add(this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 10) & 0x1f)], panel_map->rgb_adj.blue))
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->sat_add(color_conv[(flt_buf[(y*256+x)] & 0x1f)], red_adj),
+																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 5) & 0x1f)], green_adj),
+																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 10) & 0x1f)], blue_adj))
 													   );
 				x += x_inc;
 			}
