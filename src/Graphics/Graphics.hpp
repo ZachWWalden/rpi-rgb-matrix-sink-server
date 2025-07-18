@@ -4,6 +4,7 @@
 #include "../Config/Config.hpp" //this file includes GraphicsStructs.hpp
 #include "../Network/Network.hpp"
 #include <cstdint>
+#include <sys/types.h>
 
 using rgb_matrix::Canvas;
 
@@ -93,6 +94,8 @@ class Graphics
 		bool isPointOnScreen(Point pt);
 
 		uint8_t sadd8(uint8_t a, uint8_t b);
+
+		uint8_t sat_add(int16_t a, int16_t b);
 
 		uint8_t*** rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet);
 		uint8_t*** rgb555torgb888(ZwNetwork::SinkPacket frame_packet);

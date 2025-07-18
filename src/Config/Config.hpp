@@ -41,6 +41,25 @@
 namespace ZwConfig
 {
 
+struct RgbAdjust
+{
+	int8_t red, green, blue;
+	RgbAdjust()
+	{
+
+	}
+	RgbAdjust(int8_t n_red, int8_t n_green, int8_t n_blue)
+	{
+		red = n_red;
+		green = n_green;
+		blue = n_blue;
+	}
+	void disp()
+	{
+		LOG_COLOR(red, green, blue);
+	}
+};
+
 struct RotationConstants
 {
 	ZwGraphics::Vec2I offset, increment;
@@ -66,11 +85,13 @@ struct PanelMap
 {
 	ZwGraphics::Rectangle source, destination;
 	RotationConstants rot_constants;
-	PanelMap(ZwGraphics::Rectangle src, ZwGraphics::Rectangle dest, RotationConstants rotation_constants)
+	RgbAdjust rgb_adj;
+	PanelMap(ZwGraphics::Rectangle src, ZwGraphics::Rectangle dest, RotationConstants rotation_constants, RgbAdjust n_rgb_adj)
 	{
 		source = src;
 		destination = dest;
 		rot_constants = rotation_constants;
+		rgb_adj = n_rgb_adj;
 	}
 	void disp()
 	{
@@ -80,6 +101,8 @@ struct PanelMap
 		destination.disp();
 		LOG("Rot constants");
 		rot_constants.disp();
+		LOG("Rgb Adjust");
+		rgb_adj.disp();
 	}
 };
 

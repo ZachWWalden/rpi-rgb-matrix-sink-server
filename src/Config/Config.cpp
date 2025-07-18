@@ -128,6 +128,7 @@ bool Config::readConfigFile()
 	{
 		Json::Value cur_src = panel_maps[i]["source"];
 		Json::Value cur_dst = panel_maps[i]["destination"];
+		Json::Value cur_rgb_adjust = panel_maps[i]["rgb_adjust"];
 
 		RotationConstants rot_constants = getRotConstants(panel_maps[i]["rot"].asInt());
 
@@ -151,7 +152,12 @@ bool Config::readConfigFile()
 													cur_dst["y2"].asInt()
 												)
 											),
-											rot_constants
+											rot_constants,
+											RgbAdjust(
+													cur_rgb_adjust["red"].asInt(),
+													cur_rgb_adjust["green"].asInt(),
+													cur_rgb_adjust["blue"].asInt()
+											)
 											));
 	}
 

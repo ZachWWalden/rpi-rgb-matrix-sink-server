@@ -131,9 +131,9 @@ void Graphics::drawWithMaps(std::vector<ZwConfig::PanelMap*>* panels)
 				// 		  this->render_target[y][x][1],
 				// 		  this->render_target[y][x][2]);
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->render_target[y][x][0],
-																this->render_target[y][x][1],
-																this->render_target[y][x][2])
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->sat_add(this->render_target[y][x][0], panel_map->rgb_adj.red),
+																this->sat_add(this->render_target[y][x][1], panel_map->rgb_adj.green),
+																this->sat_add(this->render_target[y][x][2], panel_map->rgb_adj.blue))
 													   );
 				x += panel_map->rot_constants.increment.x;
 			}
@@ -171,9 +171,9 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 			for(int rows = panel_map->destination.p_top_left.y ;rows <= panel_map->destination.p_bot_right.y; rows++)
 			{
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->five_bit_to_eight_bit[(flt_buf[(y*256+x)] & 0x1f)],
-																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 5) & 0x1f)],
-																this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 10) & 0x1f)])
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->sat_add(this->five_bit_to_eight_bit[(flt_buf[(y*256+x)] & 0x1f)], panel_map->rgb_adj.red),
+																this->sat_add(this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 5) & 0x1f)], panel_map->rgb_adj.green),
+																this->sat_add(this->five_bit_to_eight_bit[((flt_buf[(y*256+x)] >> 10) & 0x1f)], panel_map->rgb_adj.blue))
 													   );
 				x += panel_map->rot_constants.increment.x;
 			}
@@ -712,6 +712,16 @@ uint8_t Graphics::sadd8(uint8_t a, uint8_t b)
 {
 	return (a > 0xFF - b) ? 0xFF : a + b;
 }
+
+uint8_t Graphics::sat_add(int16_t a, int16_t b)
+{
+	if(a > (0xFF - b))
+		return 0xFF;
+	else if (0 > (a + b))
+		return 0;
+	return a + b;
+}
+
 /*	const u16 intensity_u16 = (u16)(intensity * (float)(0xFFFF));
 	u8  r = (u8)( (((outColor >>  0) & 0x1F) * intensity_u16) >> 16 );
 	u8  g = (u8)( (((outColor >>  5) & 0x1F) * intensity_u16) >> 16 );
