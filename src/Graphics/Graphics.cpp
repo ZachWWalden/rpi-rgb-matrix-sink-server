@@ -742,11 +742,6 @@ uint8_t*** Graphics::convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket fram
 
 	switch (frame_packet.header.color_mode)
 	{
-		case 0x00 : {
-			//NDS RGB555 with Intensity
-			ret_val = this->rgb555torgb888Intensity(frame_packet);
-			break;
-		}
 		case 0x01 : {
 			//NDS RGB555 no intensity
 			ret_val = this->rgb555torgb888(frame_packet);
@@ -766,34 +761,6 @@ uint8_t*** Graphics::convertFlatBufferToTriplePointer(ZwNetwork::SinkPacket fram
 	this->height = frame_packet.header.v_res;
 
 	return ret_val;
-}
-
-uint8_t*** Graphics::rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet)
-{
-	if(frame_packet.data == nullptr)
-		return nullptr;
-	uint8_t ***rgb888 = allocTriplePointer<uint8_t>(frame_packet.header.v_res + 1, frame_packet.header.h_res + 1, 3, 0x00);
-	uint16_t* buffer = (uint16_t*)frame_packet.data;
-	int num_pixels = (frame_packet.header.h_res + 1) * (frame_packet.header.v_res + 1);
-	int flat_idx = 0;
-	//convert floating point intensity 0.0f <= intensity <= 1.0f to a uint16_t
-	const uint16_t intensity = (uint16_t)(frame_packet.header.intensity * (float)(0xFFFF));
-
-	for(int y = 0; y < frame_packet.header.v_res + 1; y++)
-	{
-		for(int x = 0; x < frame_packet.header.h_res + 1 && flat_idx < num_pixels; x++)
-		{
-			//Code borrowed from Desmume under GPL2
-			rgb888[y][x][0] = (uint8_t)( (((buffer[flat_idx] >>  0) & 0x1F) * intensity) >> 16 );
-			rgb888[y][x][1] = (uint8_t)( (((buffer[flat_idx] >>  5) & 0x1F) * intensity) >> 16 );
-			rgb888[y][x][2] = (uint8_t)( (((buffer[flat_idx] >>  10) & 0x1F) * intensity) >> 16 );
-			flat_idx++;
-		}
-	}
-
-	delete frame_packet.data;
-
-	return rgb888;
 }
 
 uint8_t*** Graphics::rgb555torgb888(ZwNetwork::SinkPacket frame_packet)

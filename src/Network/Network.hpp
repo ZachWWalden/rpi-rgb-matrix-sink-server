@@ -66,8 +66,6 @@ struct SinkPacketHeader
 	//Location
 	uint8_t h_loc;
 	uint8_t v_loc;
-	//Display intensity
-	float intensity;
 };
 
 struct HandshakeHeader

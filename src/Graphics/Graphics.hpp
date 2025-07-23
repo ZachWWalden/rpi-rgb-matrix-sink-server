@@ -97,7 +97,6 @@ class Graphics
 
 		uint8_t sat_add(int16_t a, int16_t b);
 
-		uint8_t*** rgb555torgb888Intensity(ZwNetwork::SinkPacket frame_packet);
 		uint8_t*** rgb555torgb888(ZwNetwork::SinkPacket frame_packet);
 		uint8_t*** flatRgb888torgb888TriplePointer(ZwNetwork::SinkPacket frame_packet);
 };
