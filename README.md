@@ -9,7 +9,7 @@ an array of rgb led matrices.
 ## Header Structures
 ### Sink Packet Header
 |Member|Type|Description|
-|;;|;;|;;|
+|:---:|:---:|:---:|
 |protocol_vers|uint8_t|Protocol Version|
 |priority|uint8_t|Frame Priority|
 |h_res|uint8_t|Horizontal resolution of frame|
@@ -20,7 +20,7 @@ an array of rgb led matrices.
 |v_loc|uint8_t|Target vertical location|
 ### Handshake Header
 |Member|Type|Description|
-|;;|;;|;;|
+|:---:|:---:|:---:|
 |protocol_vers|uint8_t|Protocol Version|
 |success|uint8_t|Code indicating success|
 
