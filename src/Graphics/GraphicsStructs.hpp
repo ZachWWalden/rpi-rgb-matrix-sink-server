@@ -115,6 +115,13 @@ struct Rectangle
 		p_top_left = new_p1;
 		p_bot_right = new_p2;
 	}
+	bool is_contained(Point pnt)
+	{
+		if(pnt.x >= p_top_left.x && pnt.x <= p_bot_right.x && pnt.y >= p_top_left.y && pnt.y <= p_bot_right.y)
+			return true;
+		else
+			return false;
+	}
 	void disp()
 	{
 		LOG("p_top_left");
