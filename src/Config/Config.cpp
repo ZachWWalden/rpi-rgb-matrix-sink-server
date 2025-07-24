@@ -99,28 +99,29 @@ bool Config::readConfigFile()
 		return EXIT_FAILURE;
 	}
 
-	//get port
+	//get global config info from config file.
 	this->port = root["port"].asInt();
-	//get hardware mapping: "regular", "adafruit-hat", "adafruit-hat-pwm", "compute-moudle"
 	this->hardware_mapping = root["hardware_mapping"].asCString();
-	//get src hres
 	this->hres = root["hres"].asInt();
-	//get src vres
 	this->vres = root["vres"].asInt();
-	//get panel hres
 	this->panel_hres = root["panel_hres"].asInt();
-	//get panel vres
 	this->panel_vres = root["panel_vres"].asInt();
-	//get num chains
 	this->num_chains = root["num_chains"].asInt();
-	//get chain length
 	this->chain_length = root["chain_length"].asInt();
-	//get number of bits for pwm
 	this->led_pwm_bits = root["led_pwm_bits"].asInt();
-	//get the gpio slowdown value
 	this->led_slowdown_gpio = root["led_slowdown_gpio"].asInt();
-	//get lsb pwm nanoseconds
 	this->led_pwm_lsb_nanoseconds = root["led_pwm_lsb_nanoseconds"].asInt();
+	this->led_pwm_dither_bits = root["led_pwm_dither_bits"].asInt();
+	this->brightness = root["brightness"].asInt();
+	this->scan_mode = root["scan_mode"].asInt();
+	this->row_address_type = root["row_address_type"].asInt();
+	this->multiplexing = root["multiplexing"].asInt();
+	this->disable_hardware_pulsing = root["disable_hardware_pulsing"].asBool();
+	this->show_refresh_rate = root["show_refresh_rate"].asBool();
+	this->inverse_colors = root["inverse_colors"].asBool();
+	this->led_rgb_sequence = root["led_rgb_sequence"].asCString();
+	this->panel_type = root["panel_type"].asCString();
+	this->disable_busy_waiting = root["disable_busy_waiting"].asBool();
 
 	Json::Value panel_maps = root["panel_maps"];
 	//loop over panels
@@ -209,6 +210,16 @@ std::vector<PanelMap*>* Config::getPanelMaps()
 const char* Config::getHardwareMapping()
 {
 	return this->hardware_mapping.c_str();
+}
+
+const char* getRgbSequence()
+{
+	return this->led_rgb_sequence.c_str();
+}
+
+const char* getPanelType()
+{
+	return this->panel_type.c_str();
 }
 
 }

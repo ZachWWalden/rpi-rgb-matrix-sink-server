@@ -112,11 +112,14 @@ class Config
 public:
 	uint16_t hres, vres, panel_hres, panel_vres, port;
 	uint16_t num_chains, chain_length, led_pwm_bits, led_slowdown_gpio, led_pwm_lsb_nanoseconds;
+	uint16_t led_pwm_dither_bits, brightness, scan_mode, row_address_type, multiplexing;
+	int16_t limit_refresh_rate;
+	bool disable_hardware_pulsing, show_refresh_rate, inverse_colors, disable_busy_waiting;
 	bool is_valid = false;
 
 private:
 	std::vector<PanelMap*> panels;
-	std::string hardware_mapping;
+	std::string hardware_mapping, led_rgb_sequence, panel_type;
 	//Methods
 public:
 	Config();
@@ -124,6 +127,8 @@ public:
 
 	std::vector<PanelMap*>* getPanelMaps();
 	const char* getHardwareMapping();
+	const char* getRgbSequence();
+	const char* getPanelType();
 	void disp();
 
 private:

@@ -66,10 +66,18 @@ int main(int argc, char *argv[]) {
 	defaults.pwm_bits = config->led_pwm_bits;
 	defaults.pwm_lsb_nanoseconds = config->led_pwm_lsb_nanoseconds;
 	rt_defaults.gpio_slowdown = config->led_slowdown_gpio;
-	//This sets the default brightness.
-	defaults.brightness = 100;
-	defaults.scan_mode = 0;
-	defaults.show_refresh_rate = true;
+	defaults.pwm_dither_bits = config->led_pwm_dither_bits;
+	defaults.brightness = config->brightness;
+	defaults.scan_mode = config->scan_mode;
+	defaults.row_address_type = config->row_address_type;
+	defaults.multiplexing = config->multiplexing;
+	defaults.disable_hardware_pulsing = config->disable_hardware_pulsing;
+	defaults.show_refresh_rate = config->show_refresh_rate;
+	defaults.inverse_colors = config->inverse_colors;
+	defaults.led_rgb_sequence = config->getRgbSequence();
+	defaults.panel_type = config->getPanelType();
+	defaults.limit_refresh_rate_hz = config->limit_refresh_rate;
+	defaults.disable_busy_waiting = config->disable_busy_waiting;
 	Canvas *canvas = RGBMatrix::CreateFromOptions(defaults, rt_defaults);
 	if (canvas == NULL)
 		return 1;
