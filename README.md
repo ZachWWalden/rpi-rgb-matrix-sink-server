@@ -80,7 +80,7 @@ example configuration file is provided below.
 |Name|Valid Values|Description|
 |:---:|:---:|:---:|
 |port|1024-6535| Set to an Ephemeral Port of your choice. The server will bind to it.|
-|hardware_mapping| "regular", "adafruit-hat", "adafruit-hat-pwm", "compute-module"|Tells the [matrix library](https://www.github.com/hzeller/rpi-rgb-led-matrix) what pin mapping to use. Default is "regular".|
+|hardware_mapping| "regular", "adafruit-hat", "adafruit-hat-pwm", "compute-module", "regular-pi1"|Tells the [matrix library](https://www.github.com/hzeller/rpi-rgb-led-matrix) what pin mapping to use. Default is "regular".|
 |hres|1-256|Horizontal resolution of panel array|
 |vres|1-256|Vertial resolution of panel array|
 |panel_hres|16-64|Horizontal resolution of a single panel in your array|
@@ -186,12 +186,36 @@ than 4 bytes.
 # Demonstration
 
 # Future Plans
+## A Note on Protocol Conformity
+At the moment the server does not conform to the network protocol. It assumes that the frame
+sent over the network shares resolution with the matrix array. What this means to the end user
+is that h_loc, and v_loc must be 0. This occurred due to memory bandwidth
+optimizations necessary to get a full resolution stream to a Raspberry Pi Zero 2W. That pi is only
+capable of streaming around 35-40 fps from a client.
 ## Netcode Rewrite
+Currently, the server only supports 1 connection at a time. For another client to connect to the server,
+the first connection MUST send a termination packet (pckt.color_mode == 0xFF). This is rather limiting.
+I plan to eventually rewrite the server code to use the select() system call rather than waiting on recv().
+This will support multiple connections as well as allow for pckt.priority to be used.
+
+Another limiting aspect of the current implementation is TCP. This type of protocol SHOULD use UDP.
+However, I wished to quickly complete this project. I decided that implementing Forward Error Correction
+as well as packet reordering was beyond the scope of a reasonable minimum viable product. I intend to
+implement these in the future.
 
 ## Per Panel Adjustable Color
+When I went about procuring panels for my array, I made the mistake of making three separate orders over the
+span of around 6 months from 2 different companies on AliExpress. Each order of panels has different color
+characteristics. I quickly implemented a simple rgb adjust system, similar to the one in Sony's picture profiles
+on their alpha cameras. But this simply did not make enough of a difference to match the color of the panels.
+To remedy this, I intend to allow the user to supply an unlimited number of 768 entry look-up tables (LUT). These
+These LUTs can be referened for use in an individual panel map. This will allow users to tune each color channel's
+gamma and chromaticity independently for each panel they have in their array.
 
 ## Primitive Drawing RPC Framework
-
+The graphics library I wrote supports drawing fonts and primitive shapes. It would be useful for a client to, instead
+of sending a raster bitmap, send a series of commands that the graphics library could execute, effectively being a
+remote procedure call framework. Each packet would contain all the procedure calls to draw a full frame.
 
 
 [^num_chains]: This value depends on what adatper board you are using. The Adafruit hat and bonnet both support only 1 chain.
