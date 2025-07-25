@@ -1,6 +1,6 @@
 {
 	"port" : 47648,
-	"hardware_mapping" : "regular",
+	"hardware_mapping" : "adafruit-hat",
 	"hres" : 64,
 	"vres" : 64,
 	"panel_hres" : 64,
