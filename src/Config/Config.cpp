@@ -212,12 +212,12 @@ const char* Config::getHardwareMapping()
 	return this->hardware_mapping.c_str();
 }
 
-const char* getRgbSequence()
+const char* Config::getRgbSequence()
 {
 	return this->led_rgb_sequence.c_str();
 }
 
-const char* getPanelType()
+const char* Config::getPanelType()
 {
 	return this->panel_type.c_str();
 }
