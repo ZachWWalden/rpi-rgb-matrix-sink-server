@@ -188,21 +188,21 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 10) & 0x1f)], blue_adj))
 													   );
 				if(row_major)
-					x += x_inc;
-				else
 					y += y_inc;
+				else
+					x += x_inc;
 			}
 			if(row_major)
-			{
-				y += y_inc;
-				//reset the other
-				x = x_initial;
-			}
-			else
 			{
 				x += x_inc;
 				//reset the other
 				y = y_initial;
+			}
+			else
+			{
+				y += y_inc;
+				//reset the other
+				x = x_initial;
 			}
 		}
 	}
