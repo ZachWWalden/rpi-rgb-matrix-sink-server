@@ -177,21 +177,26 @@ std::string Config::getConfigHome()
 RotationConstants Config::getRotConstants(int rot)
 {
 	int h_offset = 0, v_offset = 0, h_increment = 0, v_increment = 0;
+	bool row_major;
 	if(rot == 0)
 	{
 		h_offset = 0; v_offset = 0; h_increment = 1; v_increment = 1;
+		row_major = true;
 	}
 	//(0,0) -> (h_res - 1, 0)
 	else if (rot == 90 || rot == -270) {
 		h_offset = this->panel_hres - 1; v_offset = 0; h_increment = -1; v_increment = 1;
+		row_major = false;
 	}
 	//(0,0) -> (h_res - 1, v_res - 1)
 	else if (rot == 180 || rot == -180) {
 		h_offset = this->panel_hres - 1; v_offset = this->panel_vres - 1; h_increment = -1; v_increment = -1;
+		row_major = true;
 	}
 	//(0,0) -> (0, v_res - 1)
 	else if (rot == 270 || rot == -90) {
 		h_offset = 0; v_offset = this->panel_vres - 1; h_increment = 1; v_increment = -1;
+		row_major = false;
 	}
 	else
 	{
@@ -199,7 +204,7 @@ RotationConstants Config::getRotConstants(int rot)
 		exit(EXIT_FAILURE);
 	}
 
-	return RotationConstants(ZwGraphics::Vec2I(h_offset, v_offset), ZwGraphics::Vec2I(h_increment, v_increment));
+	return RotationConstants(ZwGraphics::Vec2I(h_offset, v_offset), ZwGraphics::Vec2I(h_increment, v_increment), row_major);
 }
 
 std::vector<PanelMap*>* Config::getPanelMaps()

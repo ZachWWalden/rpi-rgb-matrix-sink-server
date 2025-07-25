@@ -63,14 +63,16 @@ struct RgbAdjust
 struct RotationConstants
 {
 	ZwGraphics::Vec2I offset, increment;
+	bool row_major;
 	RotationConstants()
 	{
 
 	}
-	RotationConstants(ZwGraphics::Vec2I new_offset, ZwGraphics::Vec2I new_increment)
+	RotationConstants(ZwGraphics::Vec2I new_offset, ZwGraphics::Vec2I new_increment, bool new_row_major)
 	{
 		offset = new_offset;
 		increment = new_increment;
+		row_major = new_row_major;
 	}
 	void disp()
 	{
@@ -78,6 +80,8 @@ struct RotationConstants
 		offset.disp();
 		LOG("Increment");
 		increment.disp();
+		LOG("Row Major");
+		LOG(row_major);
 	}
 };
 

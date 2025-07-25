@@ -164,15 +164,18 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 		// panel_map->disp();
 		int x_initial = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		int x = x_initial;
-		int y = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
+		int y_initial = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
+		int y = y_initial;
 
 		int x_inc = panel_map->rot_constants.increment.x;
 		int y_inc = panel_map->rot_constants.increment.y;
+		bool row_major = panel_map->rot_constants.row_major;
 
 		int16_t red_adj = panel_map->rgb_adj.red, green_adj = panel_map->rgb_adj.green, blue_adj = panel_map->rgb_adj.blue;
 
 		int col_top_left_x = panel_map->destination.p_top_left.x, col_bot_right_x = panel_map->destination.p_bot_right.x;
 		int row_top_left_y = panel_map->destination.p_top_left.y, row_bot_right_y = panel_map->destination.p_bot_right.y;
+
 		//Loop can switch between column and row major.
 		for(int cols = col_top_left_x; cols <= col_bot_right_x; cols++)
 		{
@@ -184,11 +187,23 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 5) & 0x1f)], green_adj),
 																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 10) & 0x1f)], blue_adj))
 													   );
-				x += x_inc;
+				if(row_major)
+					x += x_inc;
+				else
+					y += y_inc;
 			}
-			y += y_inc;
-			//reset the other
-			x = x_initial;
+			if(row_major)
+			{
+				y += y_inc;
+				//reset the other
+				x = x_initial;
+			}
+			else
+			{
+				x += x_inc;
+				//reset the other
+				y = y_initial;
+			}
 		}
 	}
 	free(pckt.data);
