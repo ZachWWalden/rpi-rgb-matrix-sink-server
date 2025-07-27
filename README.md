@@ -2,9 +2,17 @@
 rpi-rgb-matrix-sink-server uses [hzeller/rpi-rgb-led-matrix](https://www.github.com/hzeller/rpi-rgb-led-matrix) to control
 an array of rgb led matrices.
 
+At the moment, the only program that supports the protocol is [ZachWWalden/desmume-matrix](https://www.github.com/zachwwalden/desmume-matrix) A demonstration can be found below
+
+## Demonstration
+
+
+[![Video Demonstration](https://img.youtube.com/vi/yfpDpgpz51Q/0.jpg)](https://www.youtube.com/watch?v=yfpDpgpz51Q "Video Demonstration")
+
+
 # Building
-Currently building this project is only supported/test on dietpi.
-to do so follow the instructions below.
+Currently building this project is only supported/test on dietpi and Raspi OS.
+to do so, install one of those operating systems, and follow the instructions below.
 
 ~~~bash
 $ sudo apt install libjsoncpp-dev
@@ -15,7 +23,12 @@ $ make
 
 Both [jsoncpp](https://www.github.com/open-source-parsers/jsoncpp) and [hzeller/rpi-rgb-led-matrix](https://www.github.com/hzeller/rpi-rgb-led-mar) use the C++ 11 standard.
 
-# Installing
+## A Note on Debug Logging
+Debug logging can be disabled. This can be done by chaning the "DEBUG" variable
+from 0 to 1, then rebuilding with make. This has one side effect of the program
+looking for the config file in ~/.config/rpi-rgb-matrix-sink-server/config.json
+
+## Installing
 Not currently supported. just sudo ./ the executable.
 
 ## Dependencies
@@ -183,9 +196,6 @@ than 4 bytes.
 |:---:|:---:|:---:|
 |protocol_vers|uint8_t|Protocol Version|
 |success|uint8_t|Code indicating success|
-
-
-# Demonstration
 
 # Future Plans
 ## A Note on Protocol Conformity
