@@ -13,8 +13,10 @@ $ cd rpi-rgb-matrix-sink-server/src
 $ make
 ~~~
 
-# Installing
+Both [jsoncpp](https://www.github.com/open-source-parsers/jsoncpp) and [hzeller/rpi-rgb-led-matrix](https://www.github.com/hzeller/rpi-rgb-led-mar) use the C++ 11 standard.
 
+# Installing
+Not currently supported. just sudo ./ the executable.
 
 ## Dependencies
 [jsoncpp](https://www.github.com/open-source-parsers/jsoncpp)
@@ -216,6 +218,10 @@ gamma and chromaticity independently for each panel they have in their array.
 The graphics library I wrote supports drawing fonts and primitive shapes. It would be useful for a client to, instead
 of sending a raster bitmap, send a series of commands that the graphics library could execute, effectively being a
 remote procedure call framework. Each packet would contain all the procedure calls to draw a full frame.
+
+## A Note on Installation.
+I will eventually get around to writing a systemd service to start the server at boot. This will then be copied to
+the correct directory and enabled using an install script.
 
 
 [^num_chains]: This value depends on what adatper board you are using. The Adafruit hat and bonnet both support only 1 chain.
