@@ -4,9 +4,8 @@ an array of rgb led matrices.
 
 At the moment, the only program that supports the protocol is [ZachWWalden/desmume-matrix](https://www.github.com/zachwwalden/desmume-matrix) A demonstration can be found below
 
-## Demonstration
-
-
+## Demonstration Video
+Clicking on the image below will take you to a youtube video demonstrating this project.
 [![Video Demonstration](https://img.youtube.com/vi/yfpDpgpz51Q/0.jpg)](https://www.youtube.com/watch?v=yfpDpgpz51Q "Video Demonstration")
 
 
@@ -94,7 +93,7 @@ example configuration file is provided below.
 ## Matrix Configuration Options
 |Name|Valid Values|Description|
 |:---:|:---:|:---:|
-|port|1024-6535| Set to an Ephemeral Port of your choice. The server will bind to it.|
+|port|1024-65535| Set to an Ephemeral Port of your choice. The server will bind to it.|
 |hardware_mapping| "regular", "adafruit-hat", "adafruit-hat-pwm", "compute-module", "regular-pi1"|Tells the [matrix library](https://www.github.com/hzeller/rpi-rgb-led-matrix) what pin mapping to use. Default is "regular".|
 |hres|1-256|Horizontal resolution of panel array|
 |vres|1-256|Vertial resolution of panel array|
