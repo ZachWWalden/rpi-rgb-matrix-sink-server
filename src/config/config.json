@@ -8,7 +8,7 @@
 	"num_chains" : 3,
 	"chain_length" : 4,
 	"led_pwm_bits" : 8,
-	"led_slowdown_gpio" : 3,
+	"led_slowdown_gpio" : 5,
 	"led_pwm_lsb_nanoseconds" : 100,
 	"led_pwm_dither_bits" : 0,
 	"brightness" : 100,
