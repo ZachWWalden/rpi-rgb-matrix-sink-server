@@ -22,10 +22,31 @@
 	"panel_type" : "",
 	"limit_refresh_rate_hz" : -1,
 	"disable_busy_waiting" : true,
+	"panel_calibration_classes" : [
+		{
+			"name" : 0,
+			"red" : 255,
+			"green" : 255,
+			"blue" : 255
+		},
+		{
+			"name" : 1,
+			"red" : 240,
+			"green" : 255,
+			"blue" : 255
+		},
+		{
+			"name" : 2,
+			"red" : 230,
+			"green" : 255,
+			"blue" : 255
+		}
+	],
 	"panel_maps" : [
 		{
 			"rot" : 90,
 			"num" : 0,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 0,
 				"y1" : 0,
@@ -37,16 +58,12 @@
 				"y1" : 128,
 				"x2" : 63,
 				"y2" : 191
-			},
-			"rgb_adjust" : {
-				"red" : 0,
-				"green" : 0,
-				"blue" : 0
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 1,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 64,
 				"y1" : 0,
@@ -68,6 +85,7 @@
 		{
 			"rot" : 90,
 			"num" : 2,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 128,
 				"y1" : 0,
@@ -79,16 +97,12 @@
 				"y1" : 128,
 				"x2" : 191,
 				"y2" : 191
-			},
-			"rgb_adjust" : {
-				"red" : 0,
-				"green" : 0,
-				"blue" : 0
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 3,
+			"panel_calibration_class" : 1,
 			"source" : {
 				"x1" : 192,
 				"y1" : 0,
@@ -100,16 +114,12 @@
 				"y1" : 128,
 				"x2" : 255,
 				"y2" : 191
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : 0,
-				"blue" : 0
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 4,
+			"panel_calibration_class" : 2,
 			"source" : {
 				"x1" : 0,
 				"y1" : 64,
@@ -121,16 +131,12 @@
 				"y1" : 64,
 				"x2" : 63,
 				"y2" : 127
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : -12,
-				"blue" : 4
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 5,
+			"panel_calibration_class" : 2,
 			"source" : {
 				"x1" : 64,
 				"y1" : 64,
@@ -142,16 +148,12 @@
 				"y1" : 64,
 				"x2" : 127,
 				"y2" : 127
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : -12,
-				"blue" : 4
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 6,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 128,
 				"y1" : 64,
@@ -163,16 +165,12 @@
 				"y1" : 64,
 				"x2" : 191,
 				"y2" : 127
-			},
-			"rgb_adjust" : {
-				"red" : 0,
-				"green" : 0,
-				"blue" : 0
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 7,
+			"panel_calibration_class" : 1,
 			"source" : {
 				"x1" : 192,
 				"y1" : 64,
@@ -184,16 +182,12 @@
 				"y1" : 64,
 				"x2" : 255,
 				"y2" : 127
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : 0,
-				"blue" : 0
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 8,
+			"panel_calibration_class" : 2,
 			"source" : {
 				"x1" : 0,
 				"y1" : 128,
@@ -205,16 +199,12 @@
 				"y1" : 0,
 				"x2" : 63,
 				"y2" : 63
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : -12,
-				"blue" : 4
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 9,
+			"panel_calibration_class" : 2,
 			"source" : {
 				"x1" : 64,
 				"y1" : 128,
@@ -226,16 +216,12 @@
 				"y1" : 0,
 				"x2" : 127,
 				"y2" : 63
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : -12,
-				"blue" : 4
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 10,
+			"panel_calibration_class" : 2,
 			"source" : {
 				"x1" : 128,
 				"y1" : 128,
@@ -247,16 +233,12 @@
 				"y1" : 0,
 				"x2" : 191,
 				"y2" : 63
-			},
-			"rgb_adjust" : {
-				"red" : -12,
-				"green" : -12,
-				"blue" : 4
 			}
 		},
 		{
 			"rot" : 90,
 			"num" : 11,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 192,
 				"y1" : 128,
@@ -268,11 +250,6 @@
 				"y1" : 0,
 				"x2" : 255,
 				"y2" : 63
-			},
-			"rgb_adjust" : {
-				"red" : 0,
-				"green" : 0,
-				"blue" : 0
 			}
 		}
 	]
