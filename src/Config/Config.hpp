@@ -43,12 +43,12 @@ namespace ZwConfig
 
 struct RgbAdjust
 {
-	int8_t red, green, blue;
+	float red, green, blue;
 	RgbAdjust()
 	{
 
 	}
-	RgbAdjust(int8_t n_red, int8_t n_green, int8_t n_blue)
+	RgbAdjust(float n_red, float n_green, float n_blue)
 	{
 		red = n_red;
 		green = n_green;

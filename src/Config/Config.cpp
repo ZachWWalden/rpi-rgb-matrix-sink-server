@@ -137,7 +137,7 @@ bool Config::readConfigFile()
 		 * Color balance algo: https://en.wikipedia.org/wiki/Color_Balance
 		 * Balanced color = Unbalanced Color * (MAX_VAL/VAL_WHITE)
 		 * =========================*/
-		panel_calibration_classes.push_back(RgbAdjust(0xFF / panel_classes[i]["red"].asInt(), 0xFF / panel_classes[i]["green"].asInt(), 0xFF / panel_classes[i]["blue"].asInt()));
+		panel_calibration_classes.push_back(RgbAdjust(255.0f / (float)(panel_classes[i]["red"].asInt()), 255.0f / (float)(panel_classes[i]["green"].asInt()), 255.0f / (float)(panel_classes[i]["blue"].asInt())));
 	}
 
 	Json::Value panel_maps = root["panel_maps"];

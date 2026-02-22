@@ -171,7 +171,7 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 		int y_inc = panel_map->rot_constants.increment.y;
 		bool row_major = panel_map->rot_constants.row_major;
 
-		int16_t red_adj = panel_map->rgb_adj.red, green_adj = panel_map->rgb_adj.green, blue_adj = panel_map->rgb_adj.blue;
+		float red_adj = panel_map->rgb_adj.red, green_adj = panel_map->rgb_adj.green, blue_adj = panel_map->rgb_adj.blue;
 
 		int col_top_left_x = panel_map->destination.p_top_left.x, col_bot_right_x = panel_map->destination.p_bot_right.x;
 		int row_top_left_y = panel_map->destination.p_top_left.y, row_bot_right_y = panel_map->destination.p_bot_right.y;
@@ -183,10 +183,25 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 			for(int rows = row_top_left_y ;rows <= row_bot_right_y; rows++)
 			{
 				uint16_t pixel = flt_buf[y*256 + x];
+				float r_val = (float) color_conv[(pixel & 0x1f)] * red_adj;
+				if(r_val > 255.0f)
+					r_val = 255.0f;
+				else if (r_val < 0.0f)
+					r_val = 0.0f;
+				float g_val = (float) color_conv[((pixel >> 5) & 0x1f)] * green_adj;
+				if(g_val > 255.0f)
+					g_val = 255.0f;
+				else if (g_val < 0.0f)
+					g_val = 0.0f;
+				float b_val = (float) color_conv[((pixel >> 10) & 0x1f)] * blue_adj;
+				if(b_val > 255.0f)
+					b_val = 255.0f;
+				else if (b_val < 0.0f)
+					b_val = 0.0f;
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	color_conv[(pixel & 0x1f)] * red_adj,
-																color_conv[((pixel >> 5) & 0x1f)] * green_adj,
-																color_conv[((pixel >> 10) & 0x1f)] * blue_adj
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	(uint8_t) r_val,
+																(uint8_t) g_val,
+																(uint8_t) b_val
 													  )
 									);
 				if(row_major)
