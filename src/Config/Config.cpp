@@ -171,7 +171,7 @@ bool Config::readConfigFile()
 												)
 											),
 											rot_constants,
-											panel_calibration_classes[panel_calibration_index];
+											panel_calibration_classes[panel_calibration_index]
 											));
 	}
 
