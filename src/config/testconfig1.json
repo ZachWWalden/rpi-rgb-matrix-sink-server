@@ -22,10 +22,19 @@
 	"panel_type" : "",
 	"limit_refresh_rate_hz" : -1,
 	"disable_busy_waiting" : true,
+	"panel_calibration_classes" : [
+		{
+			"name" : 0,
+			"red" : 255,
+			"green" : 255,
+			"blue" : 255
+		}
+	],
 	"panel_maps" : [
 		{
 			"rot" : 0,
 			"num" : 0,
+			"panel_calibration_class" : 0,
 			"source" : {
 				"x1" : 96,
 				"y1" : 65,
@@ -37,11 +46,6 @@
 				"y1" : 0,
 				"x2" : 63,
 				"y2" : 63
-			},
-			"rgb_adjust" : {
-				"red" : 0,
-				"green" : 0,
-				"blue" : 0
 			}
 		}
 	]

@@ -39,6 +39,7 @@
 #include <jsoncpp/json/config.h>
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/value.h>
+#include <vector>
 
 namespace ZwConfig
 {
@@ -123,13 +124,29 @@ bool Config::readConfigFile()
 	this->panel_type = root["panel_type"].asCString();
 	this->disable_busy_waiting = root["disable_busy_waiting"].asBool();
 
+	//temporarily read in the colorbalancing values.
+	std::vector<RgbAdjust> panel_calibration_classes;
+	Json::Value panel_classes = root["panel_calibration_classes"];
+	//loop through rgb adjusts
+	for(int i = 0; i < panel_classes.size(); i++)
+	{
+		//read in values
+		//normalize values
+		//push into vector.
+		/*===========================
+		 * Color balance algo: https://en.wikipedia.org/wiki/Color_Balance
+		 * Balanced color = Unbalanced Color * (MAX_VAL/VAL_WHITE)
+		 * =========================*/
+		panel_calibration_classes.push_back(RgbAdjust(0xFF / panel_classes[i]["red"].asInt(), 0xFF / panel_classes[i]["green"].asInt(), 0xFF / panel_classes[i]["blue"].asInt()));
+	}
+
 	Json::Value panel_maps = root["panel_maps"];
 	//loop over panels
 	for(int i = 0; i < panel_maps.size(); i++)
 	{
 		Json::Value cur_src = panel_maps[i]["source"];
 		Json::Value cur_dst = panel_maps[i]["destination"];
-		Json::Value cur_rgb_adjust = panel_maps[i]["rgb_adjust"];
+		int panel_calibration_index = panel_maps[i]["panel_calibration_class"].asInt();
 
 		RotationConstants rot_constants = getRotConstants(panel_maps[i]["rot"].asInt());
 
@@ -154,11 +171,7 @@ bool Config::readConfigFile()
 												)
 											),
 											rot_constants,
-											RgbAdjust(
-													cur_rgb_adjust["red"].asInt(),
-													cur_rgb_adjust["green"].asInt(),
-													cur_rgb_adjust["blue"].asInt()
-											)
+											panel_calibration_classes[panel_calibration_index];
 											));
 	}
 

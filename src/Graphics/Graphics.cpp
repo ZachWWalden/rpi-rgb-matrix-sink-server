@@ -182,11 +182,13 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 			// LOG_INT(rows);
 			for(int rows = row_top_left_y ;rows <= row_bot_right_y; rows++)
 			{
+				uint16_t pixel = flt_buf[y*256 + x];
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	this->sat_add(color_conv[(flt_buf[(y*256+x)] & 0x1f)], red_adj),
-																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 5) & 0x1f)], green_adj),
-																this->sat_add(color_conv[((flt_buf[(y*256+x)] >> 10) & 0x1f)], blue_adj))
-													   );
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	color_conv[(pixel & 0x1f)] * red_adj,
+																color_conv[((pixel >> 5) & 0x1f)] * green_adj,
+																color_conv[((pixel >> 10) & 0x1f)] * blue_adj
+													  )
+									);
 				if(row_major)
 					y += y_inc;
 				else
