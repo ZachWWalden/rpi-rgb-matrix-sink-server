@@ -2,11 +2,11 @@ CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter
 CXXFLAGS=$(CFLAGS) -std=c++11
 OBJDIR = .build
 #SRCS != find . -name "*.cpp"
-SRCS=./Graphics/Graphics.cpp main.cpp ./Graphics/fonts/font-4x6.cpp ./Graphics/fonts/font-5x8.cpp ./Graphics/fonts/font-7x9.cpp ./Graphics/fonts/font-9x16.cpp ./Network/Network.cpp ./Config/Config.cpp
+SRCS=./Graphics/Graphics.cpp main.cpp color-calibration.cpp ./Graphics/fonts/font-4x6.cpp ./Graphics/fonts/font-5x8.cpp ./Graphics/fonts/font-7x9.cpp ./Graphics/fonts/font-9x16.cpp ./Network/Network.cpp ./Config/Config.cpp
 SUBDIRS=./Graphics ./Graphics/fonts/ ./Network/ ./Config/
 OBJDIRS=$(SUBDIRS:%=$(OBJDIR)/%)
 OBJECTS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
-TARGET=rpi-matrixd
+TARGET=rpi-matrixd color-calibration
 
 DEPDIR = .dep
 DEPDIRS=$(SUBDIRS:%=$(DEPDIR)/%)
