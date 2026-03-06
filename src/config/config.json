@@ -25,21 +25,21 @@
 	"panel_calibration_classes" : [
 		{
 			"name" : 0,
-			"red" : 255,
-			"green" : 255,
-			"blue" : 255
+			"red" : 265,
+			"green" : 275,
+			"blue" : 265
 		},
 		{
 			"name" : 1,
-			"red" : 400,
-			"green" : 255,
-			"blue" : 255
+			"red" : 280,
+			"green" : 270,
+			"blue" : 265
 		},
 		{
 			"name" : 2,
-			"red" : 400,
-			"green" : 400,
-			"blue" : 255
+			"red" : 275,
+			"green" : 280,
+			"blue" : 245
 		}
 	],
 	"panel_maps" : [
