@@ -51,9 +51,9 @@ struct ColorRange
 	{
 		start = n_start;
 		end = n_end;
-		r_inc = n_end.red - n_start.red;
-		g_inc = n_end.green - n_start.green;
-		b_inc = n_end.blue - n_start.blue;
+		r_inc = (n_end.red - n_start.red > 0) ? 1 : 0;
+		g_inc = (n_end.green - n_start.green > 0) ? 1 : 0;
+		b_inc = (n_end.blue - n_start.blue > 0) ? 1 : 0;
 	}
 };
 
