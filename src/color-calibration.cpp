@@ -108,6 +108,8 @@ int main(int argc, char *argv[]) {
 	signal(SIGTERM, InterruptHandler);
 	signal(SIGINT, InterruptHandler);
 
+	LOG("Start Loop\n");
+
 	while(!interrupt_received)
 	{
 		//loop through calibration colors, use range variables.
@@ -116,6 +118,7 @@ int main(int argc, char *argv[]) {
 			ZwGraphics::Color cur_col = cols[i].start;
 			do
 			{
+				LOG_COLOR(cur_col.red, cur_col.green, cur_col.blue);
 				//write to matrix
 				for(int x = 0; x < config->hres; x++)
 				{
