@@ -150,9 +150,9 @@ int main(int argc, char *argv[]) {
 						b_val = 0.0f;
 
 					//write to matrix
-					for(int x = cur_map->destination.p_top_left.x; x < cur_map->destination.p_bot_right.x; x++)
+					for(int x = cur_map->destination.p_top_left.x; x <= cur_map->destination.p_bot_right.x; x++)
 					{
-						for(int y = cur_map->destination.p_top_left.y; y < cur_map->destination.p_bot_right.y; y++)
+						for(int y = cur_map->destination.p_top_left.y; y <= cur_map->destination.p_bot_right.y; y++)
 						{
 
 							canvas->SetPixel(x, y, (uint8_t) r_val,
