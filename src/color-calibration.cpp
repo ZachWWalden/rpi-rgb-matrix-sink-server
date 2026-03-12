@@ -115,14 +115,14 @@ int main(int argc, char *argv[]) {
 	while(!interrupt_received)
 	{
 		//loop through calibration colors, use range variables.
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 4 && !interrupt_received; i++)
 		{
 			ZwGraphics::Color cur_col = cols[i].start;
 			do
 			{
 				// LOG_COLOR(cur_col.red, cur_col.green, cur_col.blue);
 				//loop through panel maps
-				for(int j = 0; j < panel_maps->size(); j++)
+				for(int j = 0; j < panel_maps->size() && !interrupt_received; j++)
 				{
 					ZwConfig::PanelMap *cur_map = (*panel_maps)[j];
 
@@ -150,9 +150,9 @@ int main(int argc, char *argv[]) {
 						b_val = 0.0f;
 
 					//write to matrix
-					for(int x = cur_map->destination.p_top_left.x; x <= cur_map->destination.p_bot_right.x; x++)
+					for(int x = cur_map->destination.p_top_left.x; x <= cur_map->destination.p_bot_right.x && !interrupt_received; x++)
 					{
-						for(int y = cur_map->destination.p_top_left.y; y <= cur_map->destination.p_bot_right.y; y++)
+						for(int y = cur_map->destination.p_top_left.y; y <= cur_map->destination.p_bot_right.y && !interrupt_received; y++)
 						{
 
 							canvas->SetPixel(x, y, (uint8_t) r_val,
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 				cur_col.red += cols[i].r_inc;
 				cur_col.green += cols[i].g_inc;
 				cur_col.blue += cols[i].b_inc;
-			}while(!isColorEqual(cur_col, cols[i].end));
+			}while(!isColorEqual(cur_col, cols[i].end) && !interrupt_received);
 		}
 
 	}
