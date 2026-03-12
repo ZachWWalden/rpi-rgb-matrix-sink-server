@@ -133,17 +133,17 @@ int main(int argc, char *argv[]) {
 					float green_adj = cur_map->rgb_adj.green;
 					float blue_adj = cur_map->rgb_adj.blue;
 
-					float r_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.red >> 3];
+					float r_val = red_adj * cur_col.red;
 					if(r_val > 255.0f)
 						r_val = 255.0f;
 					else if (r_val < 0.0f)
 						r_val = 0.0f;
-					float g_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.green >> 3];
+					float g_val = red_adj * cur_col.green;
 					if(g_val > 255.0f)
 						g_val = 255.0f;
 					else if (g_val < 0.0f)
 						g_val = 0.0f;
-					float b_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.blue >> 3];
+					float b_val = red_adj * cur_col.blue;
 					if(b_val > 255.0f)
 						b_val = 255.0f;
 					else if (b_val < 0.0f)
