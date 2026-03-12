@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
 
 
 				//sleep
-				usleep(1000 * 50);
+				usleep(1000 * 100);
 
 				//inc color
 				cur_col.red += cols[i].r_inc;
