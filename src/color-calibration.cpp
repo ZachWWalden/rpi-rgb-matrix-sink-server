@@ -110,6 +110,8 @@ int main(int argc, char *argv[]) {
 
 	LOG("Start Loop\n");
 
+	auto panel_maps = config->getPanelMaps();
+
 	while(!interrupt_received)
 	{
 		//loop through calibration colors, use range variables.
@@ -118,20 +120,51 @@ int main(int argc, char *argv[]) {
 			ZwGraphics::Color cur_col = cols[i].start;
 			do
 			{
-				LOG_COLOR(cur_col.red, cur_col.green, cur_col.blue);
-				//write to matrix
-				for(int x = 0; x < config->hres; x++)
+				// LOG_COLOR(cur_col.red, cur_col.green, cur_col.blue);
+				//loop through panel maps
+				for(int j = 0; j < panel_maps->size(); j++)
 				{
-					for(int y = 0; y < config->vres; y++)
+					ZwConfig::PanelMap *cur_map = (*panel_maps)[j];
+
+					int x = cur_map->destination.p_top_left.x;
+					int y = cur_map->destination.p_top_left.y;
+
+					float red_adj = cur_map->rgb_adj.red;
+					float green_adj = cur_map->rgb_adj.green;
+					float blue_adj = cur_map->rgb_adj.blue;
+
+					float r_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.red >> 3];
+					if(r_val > 255.0f)
+						r_val = 255.0f;
+					else if (r_val < 0.0f)
+						r_val = 0.0f;
+					float g_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.green >> 3];
+					if(g_val > 255.0f)
+						g_val = 255.0f;
+					else if (g_val < 0.0f)
+						g_val = 0.0f;
+					float b_val = red_adj * graphics_mgr->five_bit_to_eight_bit[cur_col.blue >> 3];
+					if(b_val > 255.0f)
+						b_val = 255.0f;
+					else if (b_val < 0.0f)
+						b_val = 0.0f;
+
+					//write to matrix
+					for(int x = cur_map->destination.p_top_left.x; x < cur_map->destination.p_bot_right.x; x++)
 					{
-						canvas->SetPixel(x, y, graphics_mgr->five_bit_to_eight_bit[cur_col.red >> 3],
-											   graphics_mgr->five_bit_to_eight_bit[cur_col.green >> 3],
-											   graphics_mgr->five_bit_to_eight_bit[cur_col.blue >> 3]);
+						for(int y = cur_map->destination.p_top_left.y; y < cur_map->destination.p_bot_right.y; y++)
+						{
+
+							canvas->SetPixel(x, y, (uint8_t) r_val,
+												   (uint8_t) g_val,
+												   (uint8_t) b_val);
+						}
 					}
 				}
 
+
 				//sleep
-				usleep(1000 * 10);
+				usleep(1000 * 50);
 
 				//inc color
 				cur_col.red += cols[i].r_inc;
