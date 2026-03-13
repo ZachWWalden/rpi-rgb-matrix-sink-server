@@ -25,18 +25,21 @@
 	"panel_calibration_classes" : [
 		{
 			"name" : 0,
+			"gamma_lut" : "class1.json",
 			"red" : 265,
 			"green" : 275,
 			"blue" : 265
 		},
 		{
 			"name" : 1,
+			"gamma_lut" : "class1.json",
 			"red" : 280,
 			"green" : 270,
 			"blue" : 265
 		},
 		{
 			"name" : 2,
+			"gamma_lut" : "class1.json",
 			"red" : 275,
 			"green" : 280,
 			"blue" : 245
