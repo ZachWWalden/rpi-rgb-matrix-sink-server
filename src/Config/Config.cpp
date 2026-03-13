@@ -159,7 +159,7 @@ bool Config::readConfigFile()
 		int idx = 0;
 		for(int j = 0; j < 3; j++)
 		{
-			for(int k = 0; ; k++, idx++)
+			for(int k = 0; k < channel_luts[j].size(); k++, idx++)
 			{
 				lut_mem[idx] = (channel_luts[j])[k].asInt();
 			}
