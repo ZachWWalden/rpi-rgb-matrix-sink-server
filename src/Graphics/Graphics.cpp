@@ -52,9 +52,10 @@ namespace ZwGraphics
      0,   2,   3,   4,   5,   6,   9,  13,  17,  21,  26,  31,  37,  44,  51,  58,
     66,  75,  84,  93, 103, 114, 125, 137, 149, 161, 174, 188, 202, 217, 232, 248,
   };
-Graphics::Graphics(Canvas* canvas, uint8_t height, uint8_t width)
+Graphics::Graphics(Canvas* canvas, ZwConfig::Config* config, uint8_t height, uint8_t width)
 {
 		this->canvas = canvas;
+		this->config = config;
 		this->height = height;
 		this->width = width;
 }
@@ -162,6 +163,7 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
 		// panel_map->disp();
+		uint8_t* lut_mem = this->config->getPanelLut(panel_map->rgb_adj.gamma_lut);
 		int x_initial = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		int x = x_initial;
 		int y_initial = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
@@ -199,9 +201,9 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 				else if (b_val < 0.0f)
 					b_val = 0.0f;
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	(uint8_t) r_val,
-																(uint8_t) g_val,
-																(uint8_t) b_val
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	lut_mem[(uint8_t) r_val],
+																lut_mem[1 * 256 + (uint8_t) g_val],
+																lut_mem[2 * 256 + (uint8_t) b_val]
 													  )
 									);
 				if(row_major)

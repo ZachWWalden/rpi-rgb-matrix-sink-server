@@ -35,6 +35,7 @@
 #include <jsoncpp/json/json.h>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "../Graphics/GraphicsStructs.hpp"
 
@@ -44,19 +45,22 @@ namespace ZwConfig
 struct RgbAdjust
 {
 	float red, green, blue;
+	std::string gamma_lut;
 	RgbAdjust()
 	{
 
 	}
-	RgbAdjust(float n_red, float n_green, float n_blue)
+	RgbAdjust(float n_red, float n_green, float n_blue, std::string n_gamma_lut)
 	{
 		red = n_red;
 		green = n_green;
 		blue = n_blue;
+		gamma_lut = n_gamma_lut;
 	}
 	void disp()
 	{
 		LOG_COLOR(red, green, blue);
+		LOG(gamma_lut);
 	}
 };
 
@@ -123,6 +127,7 @@ public:
 
 private:
 	std::vector<PanelMap*> panels;
+	std::map<std::string, uint8_t*> panel_luts;
 	std::string hardware_mapping, led_rgb_sequence, panel_type;
 	//Methods
 public:
@@ -130,6 +135,7 @@ public:
 	~Config();
 
 	std::vector<PanelMap*>* getPanelMaps();
+	uint8_t* getPanelLut(std::string panel_lut_key);
 	const char* getHardwareMapping();
 	const char* getRgbSequence();
 	const char* getPanelType();

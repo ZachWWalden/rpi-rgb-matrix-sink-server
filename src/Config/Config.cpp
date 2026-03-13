@@ -33,6 +33,7 @@
 
 #include "Config.hpp"
 
+#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -43,6 +44,8 @@
 
 namespace ZwConfig
 {
+
+#define NUM_LUT_VALS
 
 Config::Config()
 {
@@ -127,17 +130,49 @@ bool Config::readConfigFile()
 	//temporarily read in the colorbalancing values.
 	std::vector<RgbAdjust> panel_calibration_classes;
 	Json::Value panel_classes = root["panel_calibration_classes"];
+	std::string panel_lut_path = "config/panel-profiles/";
 	//loop through rgb adjusts
 	for(int i = 0; i < panel_classes.size(); i++)
 	{
 		//read in values
+		//read in per panel gamma correction lut.
+		std::string gamma_lut = panel_classes["gamma_lut"];
+		std::ifstream panel_lut_file;
+		std::string lut_path = panel_lut_path + gamma_lut;
+
+		panel_lut_file.open(lut_path);
+
+		Json::Value panel_lut;
+		Json::CharReaderBuilder panel_lut_builder;
+		JSONCPP_STRING errs;
+
+		if(!Json::parseFromStream(panel_lut_builder, panel_lut_file, &panel_lut, &errs))
+		{
+			std::cout << errs << std::endl;
+			return EXIT_FAILURE;
+		}
+		Json::Value channel_luts[3] = {panel_lut["red"], panel_lut["green"], panel_lut["blue"]};
+
+		//allocate memory for panel lut;
+		uint8_t *lut_mem = new uint8_t(NUM_LUT_VALS);
+
+		int idx = 0;
+		for(int j = 0; j < 3; j++)
+		{
+			for(int k = 0; ; k++, idx++)
+			{
+				lut_mem[idx] = (channel_luts[j])[k].asInt();
+			}
+		}
+		this->panel_luts[gamma_lut] = lut_mem;
+
 		//normalize values
 		//push into vector.
 		/*===========================
 		 * Color balance algo: https://en.wikipedia.org/wiki/Color_Balance
 		 * Balanced color = Unbalanced Color * (MAX_VAL/VAL_WHITE)
 		 * =========================*/
-		panel_calibration_classes.push_back(RgbAdjust(255.0f / (float)(panel_classes[i]["red"].asInt()), 255.0f / (float)(panel_classes[i]["green"].asInt()), 255.0f / (float)(panel_classes[i]["blue"].asInt())));
+		panel_calibration_classes.push_back(RgbAdjust(255.0f / (float)(panel_classes[i]["red"].asInt()), 255.0f / (float)(panel_classes[i]["green"].asInt()), 255.0f / (float)(panel_classes[i]["blue"].asInt()), gamma_lut));
 	}
 
 	Json::Value panel_maps = root["panel_maps"];
@@ -223,6 +258,11 @@ RotationConstants Config::getRotConstants(int rot)
 std::vector<PanelMap*>* Config::getPanelMaps()
 {
 	return &(this->panels);
+}
+
+uint8_t* Config::getPanelLut(std::string panel_lut_key)
+{
+	return this->panel_luts[panel_lut_key];
 }
 
 const char* Config::getHardwareMapping()
