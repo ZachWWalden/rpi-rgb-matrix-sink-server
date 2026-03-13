@@ -155,7 +155,7 @@ bool Config::readConfigFile()
 
 		//allocate memory for panel lut;
 		uint8_t *lut_mem = new uint8_t(NUM_LUT_VALS);
-
+		LOG("Lut File Opened\n");
 		int idx = 0;
 		for(int j = 0; j < 3; j++)
 		{
@@ -164,6 +164,7 @@ bool Config::readConfigFile()
 				lut_mem[idx] = (channel_luts[j])[k].asInt();
 			}
 		}
+		LOG("Lut Parsed\n");
 		this->panel_luts[gamma_lut] = lut_mem;
 
 		//normalize values
