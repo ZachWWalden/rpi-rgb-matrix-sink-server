@@ -136,7 +136,7 @@ bool Config::readConfigFile()
 	{
 		//read in values
 		//read in per panel gamma correction lut.
-		std::string gamma_lut = panel_classes["gamma_lut"];
+		std::string gamma_lut = panel_classes["gamma_lut"].asCString();
 		std::ifstream panel_lut_file;
 		std::string lut_path = panel_lut_path + gamma_lut;
 
