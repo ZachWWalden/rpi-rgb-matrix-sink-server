@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 	if (canvas == NULL)
 		return 1;
 
-	ZwGraphics::Graphics *graphics_mgr = new ZwGraphics::Graphics(canvas, config->vres, config->hres);
+	ZwGraphics::Graphics *graphics_mgr = new ZwGraphics::Graphics(canvas, config, config->vres, config->hres);
 
 	ColorRange cols[4] = {ColorRange(graphics_mgr->BLACK, graphics_mgr->WHITE),
 						  ColorRange(graphics_mgr->BLACK, graphics_mgr->RED),
