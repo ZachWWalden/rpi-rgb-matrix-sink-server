@@ -27,6 +27,7 @@ class Graphics
 
 	private:
 		Canvas* canvas = nullptr;
+		ZwConfig::Config* config;
 		uint8_t height;
 		uint8_t width;
 		uint8_t*** render_target = nullptr;
@@ -38,7 +39,7 @@ class Graphics
 
 	//methods
 	public:
-		Graphics(Canvas* canvas, uint8_t height, uint8_t width);
+		Graphics(Canvas* canvas, ZwConfig::Config* config, uint8_t height, uint8_t width);
 		Graphics(uint8_t*** render_target, uint8_t height, uint8_t width);
 		~Graphics();
 
