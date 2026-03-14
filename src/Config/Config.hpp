@@ -114,6 +114,11 @@ struct PanelMap
 	}
 };
 
+struct RGBLut256
+{
+	uint8_t* lut[3];
+};
+
 class Config
 {
 	//Attributes
@@ -127,7 +132,7 @@ public:
 
 private:
 	std::vector<PanelMap*> panels;
-	std::map<std::string, uint8_t*> panel_luts;
+	std::map<std::string, RGBLut256> panel_luts;
 	std::string hardware_mapping, led_rgb_sequence, panel_type;
 	//Methods
 public:
@@ -135,7 +140,7 @@ public:
 	~Config();
 
 	std::vector<PanelMap*>* getPanelMaps();
-	uint8_t* getPanelLut(std::string panel_lut_key);
+	RGBLut256 getPanelLut(std::string panel_lut_key);
 	const char* getHardwareMapping();
 	const char* getRgbSequence();
 	const char* getPanelType();

@@ -163,7 +163,7 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 	for(ZwConfig::PanelMap* panel_map: *panels)
 	{
 		// panel_map->disp();
-		uint8_t* lut_mem = this->config->getPanelLut(panel_map->rgb_adj.gamma_lut);
+		ZwConfig::RGBLut256 lut_mem = this->config->getPanelLut(panel_map->rgb_adj.gamma_lut);
 		int x_initial = panel_map->source.p_top_left.x + panel_map->rot_constants.offset.x;
 		int x = x_initial;
 		int y_initial = panel_map->source.p_top_left.y + panel_map->rot_constants.offset.y;
@@ -201,9 +201,9 @@ void Graphics::drawWithMapsFlat555(std::vector<ZwConfig::PanelMap*>* panels, ZwN
 				else if (b_val < 0.0f)
 					b_val = 0.0f;
 				//Write pixel to canvas
-				this->SetCanvasPixel(cols, rows, Color(0xFF,	lut_mem[(uint8_t) r_val],
-																lut_mem[1 * 256 + (uint8_t) g_val],
-																lut_mem[2 * 256 + (uint8_t) b_val]
+				this->SetCanvasPixel(cols, rows, Color(0xFF,	lut_mem.lut[0][(uint8_t) r_val],
+																lut_mem.lut[1][(uint8_t) g_val],
+																lut_mem.lut[2][(uint8_t) b_val]
 													  )
 									);
 				if(row_major)

@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 				{
 					ZwConfig::PanelMap *cur_map = (*panel_maps)[j];
 
-					uint8_t* lut_mem = config->getPanelLut(cur_map->rgb_adj.gamma_lut);
+					ZwConfig::RGBLut256 lut_mem = config->getPanelLut(cur_map->rgb_adj.gamma_lut);
 
 					int x = cur_map->destination.p_top_left.x;
 					int y = cur_map->destination.p_top_left.y;
@@ -157,9 +157,9 @@ int main(int argc, char *argv[]) {
 						for(int y = cur_map->destination.p_top_left.y; y <= cur_map->destination.p_bot_right.y && !interrupt_received; y++)
 						{
 
-							canvas->SetPixel(x, y, lut_mem[(uint8_t) r_val],
-												   lut_mem[1 * 256 + (uint8_t) g_val],
-												   lut_mem[2 * 256 + (uint8_t) b_val]);
+							canvas->SetPixel(x, y, lut_mem.lut[0][(uint8_t) r_val],
+												   lut_mem.lut[1][(uint8_t) g_val],
+												   lut_mem.lut[2][(uint8_t) b_val]);
 						}
 					}
 				}

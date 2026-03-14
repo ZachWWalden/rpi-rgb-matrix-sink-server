@@ -154,14 +154,14 @@ bool Config::readConfigFile()
 		Json::Value channel_luts[3] = {panel_lut["red"], panel_lut["green"], panel_lut["blue"]};
 
 		//allocate memory for panel lut;
-		uint8_t *lut_mem = new uint8_t(NUM_LUT_VALS);
+		RGBLut256 lut_mem;
 
-		int idx = 0;
 		for(int j = 0; j < 3; j++)
 		{
-			for(int k = 0; ; k++, idx++)
+			(lut_mem.lut)[j] = (uint8_t*) malloc(channel_luts[j].size());
+			for(int k = 0; ; k++)
 			{
-				lut_mem[idx] = (channel_luts[j])[k].asInt();
+				(lut_mem.lut)[j][k] = (channel_luts[j])[k].asInt();
 			}
 		}
 		this->panel_luts[gamma_lut] = lut_mem;
@@ -260,7 +260,7 @@ std::vector<PanelMap*>* Config::getPanelMaps()
 	return &(this->panels);
 }
 
-uint8_t* Config::getPanelLut(std::string panel_lut_key)
+RGBLut256 Config::getPanelLut(std::string panel_lut_key)
 {
 	return this->panel_luts[panel_lut_key];
 }
