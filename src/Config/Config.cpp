@@ -45,7 +45,7 @@
 namespace ZwConfig
 {
 
-#define NUM_LUT_VALS
+#define NUM_LUT_VALS 768
 
 Config::Config()
 {
@@ -136,7 +136,7 @@ bool Config::readConfigFile()
 	{
 		//read in values
 		//read in per panel gamma correction lut.
-		std::string gamma_lut = panel_classes["gamma_lut"].asCString();
+		std::string gamma_lut = panel_classes[i]["gamma_lut"].asCString();
 		std::ifstream panel_lut_file;
 		std::string lut_path = panel_lut_path + gamma_lut;
 
@@ -151,20 +151,23 @@ bool Config::readConfigFile()
 			std::cout << errs << std::endl;
 			return EXIT_FAILURE;
 		}
+
+		panel_lut_file.close();
+
 		Json::Value channel_luts[3] = {panel_lut["red"], panel_lut["green"], panel_lut["blue"]};
 
 		//allocate memory for panel lut;
-		uint8_t *lut_mem = new uint8_t(NUM_LUT_VALS);
-		LOG("Lut File Opened\n");
-		int idx = 0;
+		RGBLut256 lut_mem;
+
 		for(int j = 0; j < 3; j++)
 		{
-			for(int k = 0; k < channel_luts[j].size(); k++, idx++)
+			(lut_mem.lut)[j] = (uint8_t*) malloc(channel_luts[j].size());
+			for(int k = 0; k < channel_luts[j].size(); k++)
 			{
-				lut_mem[idx] = (channel_luts[j])[k].asInt();
+				(lut_mem.lut)[j][k] = (channel_luts[j])[k].asInt();
 			}
 		}
-		LOG("Lut Parsed\n");
+
 		this->panel_luts[gamma_lut] = lut_mem;
 
 		//normalize values
@@ -261,7 +264,7 @@ std::vector<PanelMap*>* Config::getPanelMaps()
 	return &(this->panels);
 }
 
-uint8_t* Config::getPanelLut(std::string panel_lut_key)
+RGBLut256 Config::getPanelLut(std::string panel_lut_key)
 {
 	return this->panel_luts[panel_lut_key];
 }
