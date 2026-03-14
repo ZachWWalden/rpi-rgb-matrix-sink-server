@@ -173,6 +173,7 @@ int main(int argc, char *argv[]) {
 				cur_col.green += cols[i].g_inc;
 				cur_col.blue += cols[i].b_inc;
 			}while(!isColorEqual(cur_col, cols[i].end) && !interrupt_received);
+			usleep(1000 * 500);
 		}
 
 	}
