@@ -151,6 +151,9 @@ bool Config::readConfigFile()
 			std::cout << errs << std::endl;
 			return EXIT_FAILURE;
 		}
+
+		panel_lut_file.close();
+
 		Json::Value channel_luts[3] = {panel_lut["red"], panel_lut["green"], panel_lut["blue"]};
 
 		//allocate memory for panel lut;
