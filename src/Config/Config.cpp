@@ -159,7 +159,7 @@ bool Config::readConfigFile()
 		for(int j = 0; j < 3; j++)
 		{
 			(lut_mem.lut)[j] = (uint8_t*) malloc(channel_luts[j].size());
-			for(int k = 0; ; k++)
+			for(int k = 0; k < channel_luts[j].size(); k++)
 			{
 				(lut_mem.lut)[j][k] = (channel_luts[j])[k].asInt();
 			}
