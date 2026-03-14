@@ -26,23 +26,23 @@
 		{
 			"name" : 0,
 			"gamma_lut" : "class1.json",
-			"red" : 265,
-			"green" : 275,
-			"blue" : 265
+			"red" : 255,
+			"green" : 255,
+			"blue" : 255
 		},
 		{
 			"name" : 1,
 			"gamma_lut" : "class2.json",
-			"red" : 280,
-			"green" : 270,
-			"blue" : 265
+			"red" : 255,
+			"green" : 255,
+			"blue" : 255
 		},
 		{
 			"name" : 2,
 			"gamma_lut" : "class3.json",
-			"red" : 275,
-			"green" : 280,
-			"blue" : 245
+			"red" : 255,
+			"green" : 255,
+			"blue" : 255
 		}
 	],
 	"panel_maps" : [
